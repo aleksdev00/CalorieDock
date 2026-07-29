@@ -50,13 +50,15 @@ Responsibilities:
 - State handling (UI-level)
 
 
-## 2. Application Layer (Supabase + Edge Functions)
+## 2. Application Layer (Next.js Services and Server Actions)
 
 - Business logic lives here
 
-- Supabase RPC functions
+- Next.js Server Actions for authenticated mutations
 
-- Edge Functions for advanced logic
+- Next.js services for business logic and database access
+
+- Route Handlers only for HTTP and external-integration surfaces
 
 Responsibilities:
 
@@ -95,7 +97,7 @@ Next.js Frontend
 Supabase Client Layer  
         ↓  
 ------------------------------------------------  
-| Auth | Database | Storage | Edge Functions   |  
+| Auth | Database | Storage | RLS              |  
 ------------------------------------------------  
         ↓  
    PostgreSQL Database
@@ -194,17 +196,13 @@ Used for:
 - Food photos (future)
 
 
-### Edge Functions
+### MVP Backend Boundary
 
-Used for:
+- Next.js services and Server Actions own validation, business logic, and authenticated mutations.
 
-- Complex calculations
+- Supabase owns authentication, PostgreSQL, migrations, and RLS enforcement.
 
-- External API calls
-
-- Aggregations
-
-- Scheduled jobs
+- Edge Functions and PostgreSQL RPC functions are not part of the MVP.
 
 
 # Data Flow Example (Meal Logging)
@@ -213,15 +211,11 @@ Used for:
 
 2. Frontend validates (Zod)
 
-3. Supabase insert (meals + items)
+3. Next.js Server Action validates and writes meals + item nutrition snapshots through Supabase
 
-4. Trigger recalculation:
+4. Dashboard/Daily Summary reads and aggregates source tables
 
-   - daily\_summary
-
-   - analytics update
-
-5. UI refresh via query invalidation
+5. UI refreshes via query invalidation
 
 
 # Performance Strategy
@@ -232,7 +226,7 @@ Used for:
 
 - Indexed queries
 
-- Precomputed summaries (daily\_summary)
+- Indexed source-table aggregation for MVP
 
 - Minimal payload responses
 
@@ -258,7 +252,7 @@ Phase 1:
 
 Phase 2:
 
-- Edge function expansion
+- Consider Edge Functions or RPC only for documented needs
 
 - Event-driven analytics
 

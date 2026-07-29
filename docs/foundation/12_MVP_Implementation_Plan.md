@@ -293,42 +293,7 @@ Implement:
 Users can track daily nutrition.
 
 
-# Phase 5 — Dashboard
-
-## Feature
-
-F003 — Dashboard
-
-## Dependencies
-
-- Authentication.
-
-- Profile.
-
-- Meal Tracking.
-
-- Water Tracking.
-
-- Weight Tracking.
-
-## Tasks
-
-Implement:
-
-- Dashboard layout.
-
-- Widgets.
-
-- Progress cards.
-
-- Quick actions.
-
-## Deliverable
-
-Users have a central overview.
-
-
-# Phase 6 — Weight Tracking
+# Phase 5 — Weight Tracking
 
 ## Feature
 
@@ -355,7 +320,7 @@ Implement:
 Users can monitor physical progress.
 
 
-# Phase 7 — Water Tracking
+# Phase 6 — Water Tracking
 
 ## Feature
 
@@ -380,7 +345,7 @@ Implement:
 Users can track hydration.
 
 
-# Phase 8 — Daily Summary
+# Phase 7 — Daily Summary
 
 ## Feature
 
@@ -407,6 +372,43 @@ Implement:
 ## Deliverable
 
 Users understand daily performance.
+
+
+# Phase 8 — Dashboard
+
+## Feature
+
+F003 — Dashboard
+
+## Dependencies
+
+- Authentication.
+
+- Profile.
+
+- Meal Tracking.
+
+- Water Tracking.
+
+- Weight Tracking.
+
+- Daily Summary.
+
+## Tasks
+
+Implement:
+
+- Dashboard layout.
+
+- Widgets.
+
+- Progress cards.
+
+- Quick actions.
+
+## Deliverable
+
+Users have a central overview.
 
 
 # Phase 9 — Settings

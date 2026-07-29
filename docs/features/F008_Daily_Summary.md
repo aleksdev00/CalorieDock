@@ -25,7 +25,7 @@ This feature combines information from:
 
 - User Profile
 
-The Daily Summary acts as the primary source of truth for daily progress displayed throughout the application.
+The Daily Summary is a read model calculated from source tables for daily progress displayed throughout the application. It is not a persisted MVP table.
 
 
 # 2. Problem Statement
@@ -220,7 +220,7 @@ Example statuses:
 
 Users should be able to view summaries for previous days.
 
-Historical summaries must remain immutable unless underlying data changes.
+Historical summaries are calculated from source records and change only when the underlying data changes.
 
 
 # 7. Data Dependencies
@@ -294,7 +294,7 @@ Daily Summary is responsible for:
 
 - Providing summarized daily statistics.
 
-Business calculations should be centralized to avoid duplicate logic across the application.
+Business calculations should be centralized in the Next.js service layer and read from source tables; no `daily_summary` table is created for the MVP.
 
 
 # 10. UI/UX Requirements
@@ -428,11 +428,7 @@ The system must ensure:
 
 ## Row Level Security
 
-Users can:
-
-READ:
-
-- Their own daily summaries.
+The summary service must query only source rows owned by the authenticated user. No daily-summary rows or separate daily-summary RLS policy exist in the MVP.
 
 The system must never expose another user's aggregated health data.
 

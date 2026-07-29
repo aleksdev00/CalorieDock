@@ -533,6 +533,8 @@ Stores foods inside meals.
 `created\_at`
 ```
 
+`calories`, `protein`, `carbohydrates`, and `fat` are nutrition snapshots captured when the item is added. They are not recalculated when the referenced food changes.
+
 
 # 7.3 Relationships
 

@@ -430,6 +430,10 @@ Display Food
 
 `id`
 
+
+`user\_id (nullable)`
+
+
 `name`
 
 `brand`
@@ -470,14 +474,14 @@ Display Food
 ```
 
 
-# 7.1 User Custom Foods
+# 7.1 Food Ownership
 
-Users can create personal food entries.
+Foods use one table. `user_id` is nullable: `NULL` identifies a global food and a value identifies a private custom food owned by that user. Global foods are readable by authenticated users. Private foods are readable, updated, and deleted only by their owner.
 
-Table:
+No separate custom-food table or relationship table is used; the legacy outline below is not part of the MVP schema.
 
 ```
-`user\_foods`
+`not used`
 
 
 `id`
@@ -492,7 +496,7 @@ Table:
 `created\_at`
 ```
 
-Relationship:
+There is no user-food relationship table:
 
 ```
 `User`
@@ -513,12 +517,12 @@ Relationship:
 
 # 7.2 Food Source Types
 
-Possible values:
+Possible source values for the single foods table:
 
 ```
 `system`
 
-`user`
+`not used`
 
 `open\_food\_facts`
 ```

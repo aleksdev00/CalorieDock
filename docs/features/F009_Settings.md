@@ -191,7 +191,7 @@ Water:
 `oz`
 ```
 
-The system should normalize values internally while displaying the preferred unit.
+The system should normalize values internally while displaying the preferred unit. Display-unit preferences are stored only in `user_preferences`; `profiles.unit_system` remains the single coarse metric/imperial setting and must not be duplicated there.
 
 
 # 6.4 Notification Preferences

@@ -18,7 +18,7 @@ Designed for:
 
 # Core Principles
 
-- Every row belongs to a user
+- Every private row belongs to a user; global catalogue rows are explicitly shared
 
 - No shared private data
 
@@ -39,8 +39,8 @@ profiles
 ----------------------------------------  
 | meals → meal\_items → foods          |  
 | weight\_entries                      |  
-| water\_intake                       |  
-| daily\_summary                      |  
+| water\_entries                      |  
+| user\_preferences                  |  
 | achievements                       |  
 ----------------------------------------
 ```
@@ -54,21 +54,21 @@ Extends auth.users
 
 - id (uuid PK)
 
-- user\_id (uuid FK)
+- full\_name
 
-- name
+- date\_of\_birth
 
-- height
+- goal
 
-- weight
+- unit\_system
 
-- age
-
-- gender
-
-- activity\_level
+- profile\_completed
 
 - created\_at
+
+- updated\_at
+
+`profiles.id` is the same UUID as `auth.users.id`; no `user_id` column is stored on `profiles`.
 
 
 ## 2. meals
@@ -81,9 +81,11 @@ Extends auth.users
 
 - meal\_type
 
-- total\_calories
+- consumed\_at
 
 - created\_at
+
+- updated\_at
 
 
 ## 3. meal\_items
@@ -100,16 +102,18 @@ Extends auth.users
 
 - protein
 
-- carbs
+- carbohydrates
 
 - fat
 
 
 ## 4. foods
 
-Global nutrition database
+Nutrition catalogue. `user_id` is nullable: `NULL` identifies a global food; a value identifies a private custom food owned by that user.
 
 - id
+
+- user\_id (nullable)
 
 - name
 
@@ -117,11 +121,11 @@ Global nutrition database
 
 - barcode (indexed)
 
-- calories\_per\_100g
+- calories
 
 - protein
 
-- carbs
+- carbohydrates
 
 - fat
 
@@ -139,7 +143,7 @@ Global nutrition database
 - date (indexed)
 
 
-## 6. water\_intake
+## 6. water\_entries
 
 - id
 
@@ -147,33 +151,32 @@ Global nutrition database
 
 - amount\_ml
 
-- date (indexed)
+- consumed\_at (indexed)
+
+- created\_at
+
+## 7. user\_preferences
+
+- user\_id (uuid PK/FK)
+
+- weight\_unit
+
+- height\_unit
+
+- water\_unit
+
+- language
+
+- theme
+
+- notification\_preferences
+
+- created\_at
+
+- updated\_at
 
 
-## 7. daily\_summary
-
-Precomputed analytics table
-
-- id
-
-- user\_id
-
-- date (indexed)
-
-- total\_calories
-
-- total\_protein
-
-- total\_carbs
-
-- total\_fat
-
-- water\_intake
-
-- weight\_snapshot (optional future)
-
-
-## 8. achievements
+## 8. achievements (future)
 
 - id
 
@@ -190,7 +193,7 @@ Critical indexes:
 
 - user\_id (all tables)
 
-- date (time-series tables)
+- consumed\_at / recorded\_at (time-series tables)
 
 - barcode (foods)
 
@@ -199,13 +202,15 @@ Critical indexes:
 
 # Row Level Security (RLS)
 
-All tables enforce:
+Private tables enforce:
 
 - Users can only access their own data
 
-- Inserts must match authenticated user\_id
+- Inserts must match the authenticated owner
 
-- No public access to private data
+- `profiles` uses `auth.uid() = id` for all ownership checks
+
+- Global foods are readable by authenticated users; private foods are readable and writable only by `auth.uid() = user_id`
 
 - Admin-only policies (future extension)
 
@@ -218,20 +223,16 @@ Meal logging:
 
 2. Insert meal\_items
 
-3. Update daily\_summary
-
-4. Trigger analytics recalculation
+3. Dashboard and Daily Summary calculate totals from meals, meal\_items, water\_entries, and weight\_entries
 
 
 # Performance Strategy
-
-- daily\_summary = precomputed dashboard layer
 
 - indexed time-series queries
 
 - caching-ready structure
 
-- minimal joins for UI queries
+- source-table aggregation for MVP; precomputed summaries are a future optimization
 
 
 # Future Extensions

@@ -691,15 +691,13 @@ Stores application-specific information about authenticated users.
 | id | UUID | Yes | References auth.users.id |
 | full\_name | TEXT | No | User display name |
 | date\_of\_birth | DATE | No | User birthday |
-| gender | TEXT | No | Optional gender information |
-| height | DECIMAL | No | User height |
-| weight | DECIMAL | No | Current weight |
-| activity\_level | TEXT | No | User activity classification |
 | goal | TEXT | No | User fitness goal |
 | unit\_system | TEXT | Yes | Metric or Imperial |
 | profile\_completed | BOOLEAN | Yes | Completion status |
 | created\_at | TIMESTAMP | Yes | Creation timestamp |
 | updated\_at | TIMESTAMP | Yes | Last update timestamp |
+
+MVP schema authority: the fields in this table are the complete MVP `profiles` contract. Earlier references in this PRD to gender, height, current weight, activity level, or separate unit fields are deferred and must not result in additional `profiles` columns. Weight records belong to `weight_entries`; display-unit preferences belong to `user_preferences`.
 
 
 
@@ -755,7 +753,7 @@ The profile acts as the root entity for all user-owned data.
 
 ## ID Constraint
 
-The profile ID must match the authenticated user ID.
+The profile ID must match the authenticated user ID. `profiles` has no `user_id` column.
 
 
 ## Required Fields

@@ -63,6 +63,8 @@ Architecture:
 `PostgreSQL Database`
 ```
 
+For the MVP, Server Actions and services are the application boundary for authenticated mutations. Route Handlers are reserved for HTTP/external integrations. Supabase provides Auth, database access, migrations, and RLS; Edge Functions and PostgreSQL RPC functions are not used.
+
 
 # 3. API Responsibilities
 
@@ -233,8 +235,6 @@ Returns:
 
 - Personal information.
 
-- Body information.
-
 - Goals.
 
 
@@ -246,13 +246,15 @@ Returns:
 
 Updates:
 
-- Name.
+- Full name.
 
-- Height.
+- Date of birth.
 
-- Goals.
+- Goal.
 
-- Activity level.
+- Unit system.
+
+- Profile completion status.
 
 
 # 7. Food Database API

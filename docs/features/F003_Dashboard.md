@@ -12,8 +12,8 @@
 | Priority | Critical |
 | Product Version | MVP |
 | Owner | CodeAnchor |
-| Dependencies | F001 Authentication, F002 User Profile |
-| Blocks | Meal Tracking, Daily Summary, Analytics |
+| Dependencies | F001 Authentication, F002 User Profile, F005 Meal Tracking, F006 Weight Tracking, F007 Water Tracking, F008 Daily Summary |
+| Blocks | Analytics |
 | Estimated Complexity | Medium-High |
 
 

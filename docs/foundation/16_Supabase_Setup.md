@@ -72,9 +72,9 @@ The following services are intentionally **not** part of the MVP:
 
 - AI Features
 
-- Edge Functions (unless required)
+- Edge Functions
 
-- Supabase Functions for business logic
+- Supabase Functions/RPC for business logic
 
 
 # 4. Authentication
@@ -136,14 +136,14 @@ Authentication users are stored in:
 `auth.users`
 ```
 
-Application tables reference authenticated users through foreign keys.
+`profiles.id` is the same UUID as `auth.users.id` and has no `user_id` column. Other user-owned tables reference authenticated users through `user_id` foreign keys.
 
 
 # 6. Row Level Security
 
 RLS is mandatory.
 
-Every user-owned table must have RLS enabled.
+Every private table must have RLS enabled. `profiles` uses `auth.uid() = id`; other private tables use their `user_id` ownership column. Foods with `user_id IS NULL` are global catalogue records and must be readable without exposing private custom foods.
 
 General rule:
 
@@ -289,9 +289,13 @@ Responsibilities:
 
 - Server Actions
 
-- Route Handlers
+- Route Handlers for HTTP/external integration surfaces
 
 The service role key must only be used in secure server environments and never exposed to the browser.
+
+## MVP Backend Boundary
+
+Next.js services and Server Actions own business logic, validation, and authenticated mutations. Supabase provides Auth, PostgreSQL, migrations, and RLS. Edge Functions and PostgreSQL RPC functions are excluded from the MVP.
 
 
 # 12. Open Food Facts Integration
