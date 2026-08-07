@@ -96,7 +96,15 @@ Extends auth.users
 
 - food\_id
 
-- quantity
+- food\_name
+
+- food\_brand
+
+- food\_source
+
+- external\_id
+
+- quantity\_grams
 
 - calories
 
@@ -105,6 +113,8 @@ Extends auth.users
 - carbohydrates
 
 - fat
+
+Meal item nutrition and identity are historical snapshots. `food_id` is nullable with `ON DELETE SET NULL`. Transient Open Food Facts products use a null `food_id` plus their validated external identifier and snapshots; they are not persisted into `foods`. F005 MVP quantities are canonical grams only.
 
 
 ## 4. foods

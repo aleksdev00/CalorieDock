@@ -51,26 +51,50 @@ export const foodSearchSchema = z.object({
   source: z.enum(["all", "system", "custom", "open_food_facts"]).default("all"),
 })
 
+const openFoodFactsNumber = z
+  .union([
+    z.number(),
+    z.string().trim().regex(/^-?\d+(?:\.\d+)?$/).transform(Number),
+  ])
+  .pipe(z.number().finite())
+
+const openFoodFactsNutrimentsSchema = z
+  .object({
+    "energy-kcal_100g": openFoodFactsNumber.optional(),
+    energy_100g: openFoodFactsNumber.optional(),
+    proteins_100g: openFoodFactsNumber.optional(),
+    carbohydrates_100g: openFoodFactsNumber.optional(),
+    fat_100g: openFoodFactsNumber.optional(),
+    fiber_100g: openFoodFactsNumber.optional(),
+    sugars_100g: openFoodFactsNumber.optional(),
+    sodium_100g: openFoodFactsNumber.optional(),
+  })
+  .nullish()
+
 export const openFoodFactsResponseSchema = z.object({
   hits: z.array(
     z.object({
       code: z.string().nullish(),
       product_name: z.string().nullish(),
-      brands: z.array(z.string()).nullish(),
-      categories: z.string().nullish(),
-      nutriments: z
-        .object({
-          "energy-kcal_100g": z.number().finite().optional(),
-          proteins_100g: z.number().finite().optional(),
-          carbohydrates_100g: z.number().finite().optional(),
-          fat_100g: z.number().finite().optional(),
-          fiber_100g: z.number().finite().optional(),
-          sugars_100g: z.number().finite().optional(),
-          sodium_100g: z.number().finite().optional(),
-        })
-        .nullish(),
+      brands: z.union([z.string(), z.array(z.string())]).nullish(),
+      categories: z.union([z.string(), z.array(z.string())]).nullish(),
+      nutriments: openFoodFactsNutrimentsSchema,
     }),
   ),
+})
+
+export const openFoodFactsProductResponseSchema = z.object({
+  code: z.string().nullish(),
+  status: z.number().int(),
+  product: z
+    .looseObject({
+      code: z.string().nullish(),
+      product_name: z.string().nullish(),
+      brands: z.union([z.string(), z.array(z.string())]).nullish(),
+      categories: z.union([z.string(), z.array(z.string())]).nullish(),
+      nutriments: openFoodFactsNutrimentsSchema,
+    })
+    .nullish(),
 })
 
 export type ValidatedFoodInput = z.output<typeof foodSchema>

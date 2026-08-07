@@ -308,9 +308,7 @@ Save Entry
 
 `- Grams.`
 
-`- Milliliters.`
-
-`- Servings.`
+MVP schema authority: consumed quantity is stored as `quantity_grams`. Milliliters and arbitrary servings are deferred because F004 does not provide density or serving-conversion metadata. Nutrition is calculated as `round(per_100_g_value * quantity_grams / 100, 2)`.
 
 
 `Example:`
@@ -512,10 +510,15 @@ Stores foods inside meals.
 `food\_id`
 
 
-`quantity`
+`food\_name`
 
+`food\_brand`
 
-`unit`
+`food\_source`
+
+`external\_id`
+
+`quantity\_grams`
 
 
 `calories`
@@ -534,6 +537,8 @@ Stores foods inside meals.
 ```
 
 `calories`, `protein`, `carbohydrates`, and `fat` are nutrition snapshots captured when the item is added. They are not recalculated when the referenced food changes.
+
+`food_id` is nullable and uses `ON DELETE SET NULL`. Internal and custom foods reference a visible `foods` row. Transient Open Food Facts products are not persisted: they use `food_id = NULL`, `food_source = 'open_food_facts'`, and a validated product identifier in `external_id`. Food identity, provenance, and calculated nutrition remain immutable historical snapshots after a source food is edited or deleted.
 
 
 # 7.3 Relationships

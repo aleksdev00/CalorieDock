@@ -33,6 +33,9 @@ export default async function DashboardPage() {
         </p>
         <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
           <Button asChild size="lg">
+            <Link href="/meals">Track meals</Link>
+          </Button>
+          <Button asChild size="lg">
             <Link href="/profile">View profile</Link>
           </Button>
           <LogoutButton />
@@ -41,4 +44,3 @@ export default async function DashboardPage() {
     </main>
   )
 }
-
