@@ -126,6 +126,12 @@ export interface Database {
           { foreignKeyName: "meal_items_food_id_fkey"; columns: ["food_id"]; isOneToOne: false; referencedRelation: "foods"; referencedColumns: ["id"] },
         ]
       }
+      weight_entries: {
+        Row: { id: string; user_id: string; weight_kg: number; recorded_at: string; note: string | null; created_at: string; updated_at: string }
+        Insert: { id?: string; user_id: string; weight_kg: number; recorded_at: string; note?: string | null; created_at?: string; updated_at?: string }
+        Update: { weight_kg?: number; recorded_at?: string; note?: string | null }
+        Relationships: [{ foreignKeyName: "weight_entries_user_id_fkey"; columns: ["user_id"]; isOneToOne: false; referencedRelation: "users"; referencedColumns: ["id"] }]
+      }
     }
     Views: Record<string, never>
     Functions: Record<string, never>
