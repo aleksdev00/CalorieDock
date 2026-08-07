@@ -1,5 +1,6 @@
 export type ProfileGoal = "weight_loss" | "maintenance" | "weight_gain"
 export type UnitSystem = "metric" | "imperial"
+export type FoodSource = "system" | "custom" | "open_food_facts"
 
 export interface Database {
   public: {
@@ -41,6 +42,74 @@ export interface Database {
           },
         ]
       }
+      foods: {
+        Row: {
+          id: string
+          user_id: string | null
+          name: string
+          brand: string | null
+          category: string
+          barcode: string | null
+          calories: number
+          protein: number
+          carbohydrates: number
+          fat: number
+          fiber: number | null
+          sugar: number | null
+          sodium: number | null
+          serving_size: number
+          serving_unit: "g"
+          source: FoodSource
+          external_id: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id?: string | null
+          name: string
+          brand?: string | null
+          category: string
+          barcode?: string | null
+          calories: number
+          protein: number
+          carbohydrates: number
+          fat: number
+          fiber?: number | null
+          sugar?: number | null
+          sodium?: number | null
+          serving_size?: number
+          serving_unit?: "g"
+          source: FoodSource
+          external_id?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          name?: string
+          brand?: string | null
+          category?: string
+          barcode?: string | null
+          calories?: number
+          protein?: number
+          carbohydrates?: number
+          fat?: number
+          fiber?: number | null
+          sugar?: number | null
+          sodium?: number | null
+          serving_size?: number
+          serving_unit?: "g"
+        }
+        Relationships: [
+          {
+            foreignKeyName: "foods_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: Record<string, never>
     Functions: Record<string, never>
@@ -48,4 +117,3 @@ export interface Database {
     CompositeTypes: Record<string, never>
   }
 }
-
