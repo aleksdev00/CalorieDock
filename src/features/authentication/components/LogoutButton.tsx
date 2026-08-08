@@ -3,10 +3,21 @@
 import { useState, useTransition } from "react"
 
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
 import { logoutAction } from "../actions"
 
-export function LogoutButton() {
+interface LogoutButtonProps {
+  className?: string
+  label?: string
+  variant?: "default" | "ghost"
+}
+
+export function LogoutButton({
+  className,
+  label = "Sign out",
+  variant = "default",
+}: LogoutButtonProps) {
   const [error, setError] = useState<string>()
   const [isPending, startTransition] = useTransition()
 
@@ -19,9 +30,15 @@ export function LogoutButton() {
   }
 
   return (
-    <div className="space-y-2">
-      <Button type="button" onClick={logout} disabled={isPending}>
-        {isPending ? "Signing out..." : "Sign out"}
+    <div className={cn("space-y-2", className)}>
+      <Button
+        className="w-full justify-start"
+        type="button"
+        variant={variant}
+        onClick={logout}
+        disabled={isPending}
+      >
+        {isPending ? "Signing out..." : label}
       </Button>
       {error ? (
         <p className="text-sm text-destructive" role="alert">
@@ -31,4 +48,3 @@ export function LogoutButton() {
     </div>
   )
 }
-

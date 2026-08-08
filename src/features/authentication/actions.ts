@@ -234,6 +234,5 @@ export async function logoutAction(): Promise<AuthActionState> {
     return { status: "error", message: result.error.message }
   }
 
-  redirect("/")
+  redirect("/login")
 }
-
