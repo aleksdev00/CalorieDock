@@ -2,6 +2,7 @@ export type ProfileGoal = "weight_loss" | "maintenance" | "weight_gain"
 export type UnitSystem = "metric" | "imperial"
 export type FoodSource = "system" | "custom" | "open_food_facts"
 export type MealType = "breakfast" | "lunch" | "dinner" | "snack"
+export type WaterUnit = "ml" | "L" | "oz"
 
 export interface Database {
   public: {
@@ -131,6 +132,18 @@ export interface Database {
         Insert: { id?: string; user_id: string; weight_kg: number; recorded_at: string; note?: string | null; created_at?: string; updated_at?: string }
         Update: { weight_kg?: number; recorded_at?: string; note?: string | null }
         Relationships: [{ foreignKeyName: "weight_entries_user_id_fkey"; columns: ["user_id"]; isOneToOne: false; referencedRelation: "users"; referencedColumns: ["id"] }]
+      }
+      user_preferences: {
+        Row: { user_id: string; weight_unit: "kg" | "lbs"; height_unit: "cm" | "ft/in"; water_unit: WaterUnit; language: "en" | "sr"; theme: "system" | "light" | "dark"; notification_preferences: Record<string, unknown>; created_at: string; updated_at: string }
+        Insert: { user_id: string; weight_unit?: "kg" | "lbs"; height_unit?: "cm" | "ft/in"; water_unit?: WaterUnit; language?: "en" | "sr"; theme?: "system" | "light" | "dark"; notification_preferences?: Record<string, unknown>; created_at?: string; updated_at?: string }
+        Update: { weight_unit?: "kg" | "lbs"; height_unit?: "cm" | "ft/in"; water_unit?: WaterUnit; language?: "en" | "sr"; theme?: "system" | "light" | "dark"; notification_preferences?: Record<string, unknown> }
+        Relationships: [{ foreignKeyName: "user_preferences_user_id_fkey"; columns: ["user_id"]; isOneToOne: true; referencedRelation: "users"; referencedColumns: ["id"] }]
+      }
+      water_entries: {
+        Row: { id: string; user_id: string; amount_ml: number; consumed_at: string; created_at: string }
+        Insert: { id?: string; user_id: string; amount_ml: number; consumed_at: string; created_at?: string }
+        Update: { amount_ml?: number; consumed_at?: string }
+        Relationships: [{ foreignKeyName: "water_entries_user_id_fkey"; columns: ["user_id"]; isOneToOne: false; referencedRelation: "users"; referencedColumns: ["id"] }]
       }
     }
     Views: Record<string, never>

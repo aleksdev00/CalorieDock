@@ -167,23 +167,21 @@ Nutrition catalogue. `user_id` is nullable: `NULL` identifies a global food; a v
 
 ## 7. user\_preferences
 
-- user\_id (uuid PK/FK)
+One-to-one application preferences for an authenticated user. Display-unit preferences are stored here rather than on source entries.
 
-- weight\_unit
+| Column | Type | Required | Default | Allowed values / constraint |
+| - | - | - | - | - |
+| user\_id | UUID | Yes | None | Primary key; references `auth.users.id` with `ON DELETE CASCADE` |
+| weight\_unit | TEXT | Yes | `kg` | `kg`, `lbs` |
+| height\_unit | TEXT | Yes | `cm` | `cm`, `ft/in` |
+| water\_unit | TEXT | Yes | `ml` | `ml`, `L`, `oz` |
+| language | TEXT | Yes | `en` | `en`, `sr` |
+| theme | TEXT | Yes | `system` | `system`, `light`, `dark` |
+| notification\_preferences | JSONB | Yes | `{}` | Must be a JSON object |
+| created\_at | TIMESTAMPTZ | Yes | `now()` | Creation timestamp |
+| updated\_at | TIMESTAMPTZ | Yes | `now()` | Last-update timestamp |
 
-- height\_unit
-
-- water\_unit
-
-- language
-
-- theme
-
-- notification\_preferences
-
-- created\_at
-
-- updated\_at
+For F007, authenticated application access is limited to reading the owner row, inserting `user_id` and `water_unit` when recovery is needed, and updating `water_unit`. Other preference fields are reserved for F009.
 
 
 ## 8. achievements (future)
