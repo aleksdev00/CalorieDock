@@ -4,19 +4,18 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
-import type { UnitSystem } from "@/types/database"
 import { createWeightEntryAction, updateWeightEntryAction } from "../actions"
 import { weightEntrySchema } from "../schemas/weight-entry.schema"
-import type { WeightActionState, WeightEntryInput } from "../types"
+import type { WeightActionState, WeightEntryInput, WeightUnit } from "../types"
 import { toLocalDateTime } from "../utils/date-time"
 
 const INPUT = "h-11 w-full rounded-lg border bg-background px-3 text-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive"
 
-export function WeightEntryForm({ entryId, unitSystem, defaultValues }: { entryId?: string; unitSystem: UnitSystem; defaultValues?: WeightEntryInput }) {
+export function WeightEntryForm({ entryId, weightUnit, defaultValues }: { entryId?: string; weightUnit: WeightUnit; defaultValues?: WeightEntryInput }) {
   const [state, setState] = useState<WeightActionState>({ status: "idle" })
   const [pending, startTransition] = useTransition()
   const { register, handleSubmit, formState: { errors } } = useForm<WeightEntryInput>({ resolver: zodResolver(weightEntrySchema), defaultValues: defaultValues ?? { recordedAt: toLocalDateTime(), note: "" } })
-  const unit = unitSystem === "imperial" ? "lb" : "kg"
+  const unit = weightUnit === "lbs" ? "lb" : "kg"
   const fieldError = state.fieldErrors?.weight?.[0] ?? errors.weight?.message
 
   function submit(values: WeightEntryInput) {

@@ -43,7 +43,6 @@ function MetricCard({ label, value, detail }: { label: string; value: string; de
 export function DashboardPage({ dashboard }: { dashboard: DashboardData }) {
   const { nutrition, meals, weight, profile } = dashboard
   const name = profile.fullName?.trim().split(/\s+/)[0]
-  const weightSystem = dashboard.weightUnit === "lbs" ? "imperial" : "metric"
   const weightUnit = dashboard.weightUnit === "lbs" ? "lb" : "kg"
   const summaryHref = `/daily-summary?${new URLSearchParams({ date: dashboard.selectedDate, timeZone: dashboard.timeZone }).toString()}`
 
@@ -97,7 +96,7 @@ export function DashboardPage({ dashboard }: { dashboard: DashboardData }) {
 
           <section aria-labelledby="weight-heading" className="rounded-2xl border bg-card p-5 shadow-sm">
             <div className="flex items-center justify-between"><h2 id="weight-heading" className="text-xl font-semibold">Latest weight</h2><Scale className="text-primary" aria-hidden="true" /></div>
-            {weight ? <><p className="mt-4 text-3xl font-bold">{formatDisplayWeight(weight.weightKg, weightSystem)} {weightUnit}</p><p className="mt-2 text-sm text-muted-foreground">Recorded {formatZonedDateTime(weight.recordedAt, dashboard.timeZone)}</p></> : <><p className="mt-4 font-semibold">No weight data available</p><p className="mt-2 text-sm text-muted-foreground">Add your first measurement to track progress.</p></>}
+            {weight ? <><p className="mt-4 text-3xl font-bold">{formatDisplayWeight(weight.weightKg, dashboard.weightUnit)} {weightUnit}</p><p className="mt-2 text-sm text-muted-foreground">Recorded {formatZonedDateTime(weight.recordedAt, dashboard.timeZone)}</p></> : <><p className="mt-4 font-semibold">No weight data available</p><p className="mt-2 text-sm text-muted-foreground">Add your first measurement to track progress.</p></>}
             <Button asChild variant="outline" className="mt-5 w-full"><Link href="/weight">View weight</Link></Button>
           </section>
         </div>

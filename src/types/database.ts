@@ -134,9 +134,9 @@ export interface Database {
         Relationships: [{ foreignKeyName: "weight_entries_user_id_fkey"; columns: ["user_id"]; isOneToOne: false; referencedRelation: "users"; referencedColumns: ["id"] }]
       }
       user_preferences: {
-        Row: { user_id: string; weight_unit: "kg" | "lbs"; height_unit: "cm" | "ft/in"; water_unit: WaterUnit; language: "en" | "sr"; theme: "system" | "light" | "dark"; notification_preferences: Record<string, unknown>; created_at: string; updated_at: string }
-        Insert: { user_id: string; weight_unit?: "kg" | "lbs"; height_unit?: "cm" | "ft/in"; water_unit?: WaterUnit; language?: "en" | "sr"; theme?: "system" | "light" | "dark"; notification_preferences?: Record<string, unknown>; created_at?: string; updated_at?: string }
-        Update: { weight_unit?: "kg" | "lbs"; height_unit?: "cm" | "ft/in"; water_unit?: WaterUnit; language?: "en" | "sr"; theme?: "system" | "light" | "dark"; notification_preferences?: Record<string, unknown> }
+        Row: { user_id: string; weight_unit: "kg" | "lbs"; height_unit: "cm" | "ft/in"; water_unit: WaterUnit; language: "en" | "sr"; theme: "system" | "light" | "dark"; notification_preferences: { water_reminders: boolean; daily_reminders: boolean; goal_completion_notifications: boolean }; created_at: string; updated_at: string }
+        Insert: { user_id: string; weight_unit?: "kg" | "lbs"; height_unit?: "cm" | "ft/in"; water_unit?: WaterUnit; language?: "en" | "sr"; theme?: "system" | "light" | "dark"; notification_preferences?: { water_reminders: boolean; daily_reminders: boolean; goal_completion_notifications: boolean }; created_at?: string; updated_at?: string }
+        Update: { weight_unit?: "kg" | "lbs"; height_unit?: "cm" | "ft/in"; water_unit?: WaterUnit; language?: "en" | "sr"; theme?: "system" | "light" | "dark"; notification_preferences?: { water_reminders: boolean; daily_reminders: boolean; goal_completion_notifications: boolean } }
         Relationships: [{ foreignKeyName: "user_preferences_user_id_fkey"; columns: ["user_id"]; isOneToOne: true; referencedRelation: "users"; referencedColumns: ["id"] }]
       }
       water_entries: {

@@ -12,7 +12,7 @@ It acts as the project's central feature registry.
 | - | - | - | - | - | - |
 | Authentication | Done | Critical | 1.0 | None | AI |
 | User Profile | Done | High | 1.0 | Authentication | AI |
-| Dashboard | In Review | Critical | 1.0 | Authentication, User Profile, Meal Tracking, Weight Tracking, Water Tracking, Daily Summary | AI |
+| Dashboard | Done | Critical | 1.0 | Authentication, User Profile, Meal Tracking, Weight Tracking, Water Tracking, Daily Summary | AI |
 | Food Database | Done | Critical | 1.0 | Authentication | AI |
 | Meal Tracking | Done | Critical | 1.0 | Authentication, User Profile, Food Database | AI |
 | Water Tracking | Done | High | 1.0 | Authentication, User Profile | AI |
@@ -22,7 +22,7 @@ It acts as the project's central feature registry.
 | Weekly Review | Not Started | Medium | 1.0 | Progress Analytics | AI |
 | Achievements | Not Started | Medium | 1.0 | Progress Analytics | AI |
 | Notifications | Not Started | Medium | 1.0 | Authentication | AI |
-| Settings | Not Started | Medium | 1.0 | Authentication | AI |
+| Settings | In Review | Medium | 1.0 | Authentication | AI |
 | Premium Features | Not Started | Low | 1.0 | Authentication | AI |
 | Admin Dashboard | Not Started | High | 1.0 | Authentication | AI |
 

@@ -1,4 +1,6 @@
-import type { ProfileGoal, UnitSystem } from "@/types/database"
+import type { Database, ProfileGoal } from "@/types/database"
+
+export type WeightUnit = Database["public"]["Tables"]["user_preferences"]["Row"]["weight_unit"]
 
 export interface WeightEntry {
   id: string
@@ -36,7 +38,7 @@ export interface WeightProgress {
 export interface WeightPageData {
   entries: WeightHistoryItem[]
   progress: WeightProgress
-  unitSystem: UnitSystem
+  weightUnit: WeightUnit
   goal: ProfileGoal | null
 }
 

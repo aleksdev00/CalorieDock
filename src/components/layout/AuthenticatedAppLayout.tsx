@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 
 import { getCurrentProfile } from "@/features/profile"
+import { getThemePreference, ThemeSynchronizer } from "@/features/settings"
 
 import { AppNavigation } from "./AppNavigation"
 
@@ -13,7 +14,7 @@ export async function AuthenticatedAppLayout({
   children,
   loginPath,
 }: AuthenticatedAppLayoutProps) {
-  const result = await getCurrentProfile()
+  const [result, theme] = await Promise.all([getCurrentProfile(), getThemePreference()])
 
   if (!result.success) {
     if (result.error.code === "UNAUTHENTICATED") {
@@ -29,6 +30,7 @@ export async function AuthenticatedAppLayout({
 
   return (
     <div className="min-h-screen bg-muted/30 md:grid md:grid-cols-[15rem_minmax(0,1fr)]">
+      <ThemeSynchronizer theme={theme} />
       <AppNavigation />
       <main className="min-w-0 p-4 sm:p-6 lg:p-8">{children}</main>
     </div>

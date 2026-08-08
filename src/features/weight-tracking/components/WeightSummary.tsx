@@ -1,21 +1,20 @@
-import type { UnitSystem } from "@/types/database"
-import type { WeightProgress } from "../types"
+import type { WeightProgress, WeightUnit } from "../types"
 import { displayUnit, formatDisplayWeight, kilogramsToDisplay } from "../utils/weight"
 
-function change(value: number | null, unitSystem: UnitSystem) {
+function change(value: number | null, weightUnit: WeightUnit) {
   if (value === null) return "Not enough history"
-  const shown = kilogramsToDisplay(value, unitSystem)
-  return `${shown > 0 ? "+" : ""}${shown.toFixed(1)} ${displayUnit(unitSystem)}`
+  const shown = kilogramsToDisplay(value, weightUnit)
+  return `${shown > 0 ? "+" : ""}${shown.toFixed(1)} ${displayUnit(weightUnit)}`
 }
 
-export function WeightSummary({ progress, unitSystem }: { progress: WeightProgress; unitSystem: UnitSystem }) {
+export function WeightSummary({ progress, weightUnit }: { progress: WeightProgress; weightUnit: WeightUnit }) {
   if (progress.latestKg === null) return null
   const cards = [
-    ["Latest", `${formatDisplayWeight(progress.latestKg, unitSystem)} ${displayUnit(unitSystem)}`],
-    ["Starting", `${formatDisplayWeight(progress.startingKg!, unitSystem)} ${displayUnit(unitSystem)}`],
-    ["Total change", change(progress.totalChangeKg, unitSystem)],
-    ["7-day change", change(progress.weeklyChangeKg, unitSystem)],
-    ["Monthly change", change(progress.monthlyChangeKg, unitSystem)],
+    ["Latest", `${formatDisplayWeight(progress.latestKg, weightUnit)} ${displayUnit(weightUnit)}`],
+    ["Starting", `${formatDisplayWeight(progress.startingKg!, weightUnit)} ${displayUnit(weightUnit)}`],
+    ["Total change", change(progress.totalChangeKg, weightUnit)],
+    ["7-day change", change(progress.weeklyChangeKg, weightUnit)],
+    ["Monthly change", change(progress.monthlyChangeKg, weightUnit)],
     ["Trend", progress.direction ?? "Not available"],
   ]
   const alignment = progress.goalAlignment === "toward_goal" ? "Moving toward your profile goal" : progress.goalAlignment === "away_from_goal" ? "Moving away from your profile goal" : progress.goalAlignment === "stable" ? "Weight is stable" : null

@@ -12,8 +12,7 @@ function Metric({ label, value, detail }: { label: string; value: string; detail
 
 export function DailySummaryPage({ summary }: { summary: DailySummaryData }) {
   const { nutrition, meals, weight } = summary
-  const weightSystem = summary.weightUnit === "lbs" ? "imperial" : "metric"
-  const weightValue = weight ? formatDisplayWeight(weight.weightKg, weightSystem) : null
+  const weightValue = weight ? formatDisplayWeight(weight.weightKg, summary.weightUnit) : null
   const weightUnit = summary.weightUnit === "lbs" ? "lb" : "kg"
   return <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6">
     <header className="mb-8"><p className="text-sm font-medium text-primary">Daily summary</p><h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">{formatSelectedDate(summary.selectedDate)}</h1><p className="mt-2 text-muted-foreground">Nutrition, hydration, meals, and the latest available weight for this day.</p></header>

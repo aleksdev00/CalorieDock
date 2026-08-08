@@ -1,23 +1,23 @@
-import type { ProfileGoal, UnitSystem } from "@/types/database"
-import type { GoalAlignment, TrendDirection, WeightEntry, WeightHistoryItem, WeightProgress } from "../types"
+import type { ProfileGoal } from "@/types/database"
+import type { GoalAlignment, TrendDirection, WeightEntry, WeightHistoryItem, WeightProgress, WeightUnit } from "../types"
 
 export const KG_TO_LB = 2.2046226218
 
-export function kilogramsToDisplay(weightKg: number, unitSystem: UnitSystem) {
-  return unitSystem === "imperial" ? weightKg * KG_TO_LB : weightKg
+export function kilogramsToDisplay(weightKg: number, weightUnit: WeightUnit) {
+  return weightUnit === "lbs" ? weightKg * KG_TO_LB : weightKg
 }
 
-export function displayToKilograms(weight: number, unitSystem: UnitSystem) {
-  const kilograms = unitSystem === "imperial" ? weight / KG_TO_LB : weight
+export function displayToKilograms(weight: number, weightUnit: WeightUnit) {
+  const kilograms = weightUnit === "lbs" ? weight / KG_TO_LB : weight
   return Math.round((kilograms + Number.EPSILON) * 100) / 100
 }
 
-export function displayUnit(unitSystem: UnitSystem) {
-  return unitSystem === "imperial" ? "lb" : "kg"
+export function displayUnit(weightUnit: WeightUnit) {
+  return weightUnit === "lbs" ? "lb" : "kg"
 }
 
-export function formatDisplayWeight(weightKg: number, unitSystem: UnitSystem) {
-  return kilogramsToDisplay(weightKg, unitSystem).toFixed(1).replace(/\.0$/, "")
+export function formatDisplayWeight(weightKg: number, weightUnit: WeightUnit) {
+  return kilogramsToDisplay(weightKg, weightUnit).toFixed(1).replace(/\.0$/, "")
 }
 
 function direction(change: number): TrendDirection {

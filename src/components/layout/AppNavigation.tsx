@@ -14,6 +14,7 @@ const NAVIGATION_ITEMS = [
   { href: "/weight", label: "Weight" },
   { href: "/water", label: "Water" },
   { href: "/profile", label: "Profile" },
+  { href: "/settings", label: "Settings" },
 ] as const
 
 function NavigationLinks() {
