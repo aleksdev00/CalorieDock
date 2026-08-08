@@ -2,8 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { getMeal, MealForm } from "@/features/meal-tracking"
-import { toLocalDateTime } from "@/features/meal-tracking/components/MealForm"
+import { getMeal, MealForm, toLocalDateTime } from "@/features/meal-tracking"
 
 export const metadata: Metadata = { title: "Edit meal | CalorieDock" }
 

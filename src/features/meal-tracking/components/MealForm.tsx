@@ -8,18 +8,14 @@ import { Button } from "@/components/ui/button"
 import { createMealAction, updateMealAction } from "../actions"
 import { mealSchema } from "../schemas/meal.schema"
 import type { MealActionState, MealInput } from "../types"
+import { toLocalDateTime } from "../utils/date-time"
 
 const INPUT = "h-11 w-full rounded-lg border bg-background px-3 text-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive"
-
-function localDateTime(date = new Date()) {
-  const offset = date.getTimezoneOffset() * 60000
-  return new Date(date.getTime() - offset).toISOString().slice(0, 16)
-}
 
 export function MealForm({ mealId, defaultValues }: { mealId?: string; defaultValues?: MealInput }) {
   const [state, setState] = useState<MealActionState>({ status: "idle" })
   const [pending, startTransition] = useTransition()
-  const { register, handleSubmit, formState: { errors } } = useForm<MealInput>({ resolver: zodResolver(mealSchema), defaultValues: defaultValues ?? { name: "", mealType: "breakfast", consumedAt: localDateTime() } })
+  const { register, handleSubmit, formState: { errors } } = useForm<MealInput>({ resolver: zodResolver(mealSchema), defaultValues: defaultValues ?? { name: "", mealType: "breakfast", consumedAt: toLocalDateTime() } })
 
   function submit(values: MealInput) {
     setState({ status: "idle" })
@@ -36,5 +32,3 @@ export function MealForm({ mealId, defaultValues }: { mealId?: string; defaultVa
     <Button type="submit" size="lg" disabled={pending}>{pending ? "Saving meal..." : mealId ? "Save meal" : "Create meal"}</Button>
   </form>
 }
-
-export function toLocalDateTime(value: string) { return localDateTime(new Date(value)) }
