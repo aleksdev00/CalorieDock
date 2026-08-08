@@ -48,4 +48,8 @@ export interface DailySummaryData {
   weightUnit: WeightUnit
   unitSystem: UnitSystem
   goal: ProfileGoal | null
+  profile: {
+    fullName: string | null
+    profileCompleted: boolean
+  }
 }

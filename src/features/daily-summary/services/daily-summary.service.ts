@@ -28,7 +28,7 @@ export async function getDailySummary(selectedDate: string, timeZone: string): P
     supabase.from("meals").select(MEAL_SELECT).eq("user_id", user.id).gte("consumed_at", range.startUtc).lt("consumed_at", range.endUtc).order("consumed_at", { ascending: true }),
     supabase.from("water_entries").select("amount_ml").eq("user_id", user.id).gte("consumed_at", range.startUtc).lt("consumed_at", range.endUtc),
     supabase.from("weight_entries").select("weight_kg, recorded_at").eq("user_id", user.id).lt("recorded_at", range.endUtc).order("recorded_at", { ascending: false }).order("id", { ascending: false }).limit(1).maybeSingle(),
-    supabase.from("profiles").select("unit_system, goal").eq("id", user.id).maybeSingle(),
+    supabase.from("profiles").select("full_name, profile_completed, unit_system, goal").eq("id", user.id).maybeSingle(),
     supabase.from("user_preferences").select("weight_unit, water_unit").eq("user_id", user.id).maybeSingle(),
   ])
 
@@ -56,6 +56,10 @@ export async function getDailySummary(selectedDate: string, timeZone: string): P
       weightUnit: (preferencesResult.data?.weight_unit ?? defaultWeightUnit) as WeightUnit,
       unitSystem,
       goal: profileResult.data.goal as ProfileGoal | null,
+      profile: {
+        fullName: profileResult.data.full_name,
+        profileCompleted: profileResult.data.profile_completed,
+      },
     },
   }
 }

@@ -12,12 +12,12 @@ It acts as the project's central feature registry.
 | - | - | - | - | - | - |
 | Authentication | Done | Critical | 1.0 | None | AI |
 | User Profile | Done | High | 1.0 | Authentication | AI |
-| Dashboard | Not Started | Critical | 1.0 | Authentication, User Profile, Meal Tracking, Weight Tracking, Water Tracking, Daily Summary | AI |
+| Dashboard | In Review | Critical | 1.0 | Authentication, User Profile, Meal Tracking, Weight Tracking, Water Tracking, Daily Summary | AI |
 | Food Database | Done | Critical | 1.0 | Authentication | AI |
 | Meal Tracking | Done | Critical | 1.0 | Authentication, User Profile, Food Database | AI |
-| Water Tracking | Not Started | High | 1.0 | Authentication, User Profile | AI |
-| Weight Tracking | In Review | High | 1.0 | Authentication, User Profile | AI |
-| Daily Summary | Not Started | High | 1.0 | Meal Tracking, Weight Tracking, Water Tracking | AI |
+| Water Tracking | Done | High | 1.0 | Authentication, User Profile | AI |
+| Weight Tracking | Done | High | 1.0 | Authentication, User Profile | AI |
+| Daily Summary | Done | High | 1.0 | Meal Tracking, Weight Tracking, Water Tracking | AI |
 | Progress Analytics | Not Started | High | 1.0 | Meal Tracking, Weight Tracking | AI |
 | Weekly Review | Not Started | Medium | 1.0 | Progress Analytics | AI |
 | Achievements | Not Started | Medium | 1.0 | Progress Analytics | AI |
