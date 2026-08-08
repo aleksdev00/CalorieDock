@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useState, useTransition } from "react"
+import { useEffect, useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 
 import { Button } from "@/components/ui/button"
@@ -12,14 +12,19 @@ import { toLocalDateTime } from "../utils/date-time"
 
 const INPUT = "h-11 w-full rounded-lg border bg-background px-3 text-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive"
 
-export function MealForm({ mealId, defaultValues }: { mealId?: string; defaultValues?: MealInput }) {
+export function MealForm({ mealId, defaultValues, consumedAtInstant }: { mealId?: string; defaultValues?: MealInput; consumedAtInstant?: string }) {
   const [state, setState] = useState<MealActionState>({ status: "idle" })
   const [pending, startTransition] = useTransition()
-  const { register, handleSubmit, formState: { errors } } = useForm<MealInput>({ resolver: zodResolver(mealSchema), defaultValues: defaultValues ?? { name: "", mealType: "breakfast", consumedAt: toLocalDateTime() } })
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<MealInput>({ resolver: zodResolver(mealSchema), defaultValues: defaultValues ?? { name: "", mealType: "breakfast", consumedAt: toLocalDateTime() } })
+
+  useEffect(() => {
+    if (consumedAtInstant) setValue("consumedAt", toLocalDateTime(consumedAtInstant))
+  }, [consumedAtInstant, setValue])
 
   function submit(values: MealInput) {
     setState({ status: "idle" })
-    startTransition(async () => setState(mealId ? await updateMealAction(mealId, values) : await createMealAction(values)))
+    const input = { ...values, consumedAt: new Date(values.consumedAt).toISOString() }
+    startTransition(async () => setState(mealId ? await updateMealAction(mealId, input) : await createMealAction(input)))
   }
 
   return <form onSubmit={handleSubmit(submit)} className="space-y-6" noValidate>

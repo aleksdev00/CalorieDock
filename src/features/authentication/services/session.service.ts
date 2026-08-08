@@ -8,6 +8,8 @@ import type { Database } from "@/types/database"
 
 const PROTECTED_ROUTE_PREFIXES = [
   "/dashboard",
+  "/daily-summary",
+  "/foods",
   "/onboarding",
   "/meals",
   "/progress",

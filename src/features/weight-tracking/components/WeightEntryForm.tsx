@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useState, useTransition } from "react"
+import { useEffect, useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { createWeightEntryAction, updateWeightEntryAction } from "../actions"
@@ -11,16 +11,21 @@ import { toLocalDateTime } from "../utils/date-time"
 
 const INPUT = "h-11 w-full rounded-lg border bg-background px-3 text-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive"
 
-export function WeightEntryForm({ entryId, weightUnit, defaultValues }: { entryId?: string; weightUnit: WeightUnit; defaultValues?: WeightEntryInput }) {
+export function WeightEntryForm({ entryId, weightUnit, defaultValues, recordedAtInstant }: { entryId?: string; weightUnit: WeightUnit; defaultValues?: WeightEntryInput; recordedAtInstant?: string }) {
   const [state, setState] = useState<WeightActionState>({ status: "idle" })
   const [pending, startTransition] = useTransition()
-  const { register, handleSubmit, formState: { errors } } = useForm<WeightEntryInput>({ resolver: zodResolver(weightEntrySchema), defaultValues: defaultValues ?? { recordedAt: toLocalDateTime(), note: "" } })
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<WeightEntryInput>({ resolver: zodResolver(weightEntrySchema), defaultValues: defaultValues ?? { recordedAt: toLocalDateTime(), note: "" } })
   const unit = weightUnit === "lbs" ? "lb" : "kg"
   const fieldError = state.fieldErrors?.weight?.[0] ?? errors.weight?.message
 
+  useEffect(() => {
+    if (recordedAtInstant) setValue("recordedAt", toLocalDateTime(recordedAtInstant))
+  }, [recordedAtInstant, setValue])
+
   function submit(values: WeightEntryInput) {
     setState({ status: "idle" })
-    startTransition(async () => setState(entryId ? await updateWeightEntryAction(entryId, values) : await createWeightEntryAction(values)))
+    const input = { ...values, recordedAt: new Date(values.recordedAt).toISOString() }
+    startTransition(async () => setState(entryId ? await updateWeightEntryAction(entryId, input) : await createWeightEntryAction(input)))
   }
 
   return <form onSubmit={handleSubmit(submit)} className="space-y-6" noValidate>
