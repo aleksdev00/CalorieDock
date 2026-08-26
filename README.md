@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CalorieDock
 
-## Getting Started
+CalorieDock is a full-stack web application for tracking meals, calories, water intake, and body weight through a personal, responsive dashboard.
 
-First, run the development server:
+**Live application:** [calorie-dock.vercel.app](https://calorie-dock.vercel.app)
+
+## Overview
+
+The application is designed around private, user-owned nutrition data. Authentication, PostgreSQL storage, and row-level access controls are provided through Supabase, while the Next.js application is deployed on Vercel.
+
+## Current features
+
+- Account registration, login, email verification, and password recovery
+- Personal profile, nutrition targets, and preferences
+- Daily calorie and nutrition summaries
+- Meal creation and food-item management
+- Custom and searchable food records
+- Water-intake tracking
+- Weight tracking
+- Responsive authenticated dashboard
+- User-level data isolation with Supabase Row Level Security
+
+CalorieDock is under active development. Features described here reflect the functionality currently represented in the repository.
+
+## Technology stack
+
+- Next.js and React
+- TypeScript
+- Tailwind CSS
+- Supabase Authentication
+- PostgreSQL with Row Level Security
+- Zod validation
+- TanStack Query
+- Vercel
+
+## Architecture
+
+The project uses the Next.js App Router and a feature-oriented structure. Business logic is organized into feature services, server actions, validation schemas, components, and shared infrastructure. Database changes are versioned through Supabase migrations.
+
+## Local development
+
+### Requirements
+
+- Node.js
+- npm
+- A Supabase project, or the Supabase CLI for local development
+
+### Setup
 
 ```bash
+git clone https://github.com/aleksdev00/CalorieDock.git
+cd CalorieDock
+npm install
+cp .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Configure these values in `.env.local`:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Never commit production credentials or server-only Supabase keys.
 
-## Learn More
+## Quality and security
 
-To learn more about Next.js, take a look at the following resources:
+The project includes input validation, protected application routes, database migrations, ownership-based Row Level Security policies, and documented testing and deployment procedures.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project status
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Active development. The web application is deployed on Vercel and continues to receive functional and interface improvements.
