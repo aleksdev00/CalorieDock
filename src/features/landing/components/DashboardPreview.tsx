@@ -22,7 +22,7 @@ export function DashboardPreview({ compact = false }: { compact?: boolean }) {
             <p className="mb-5 text-[10px] font-bold">CalorieDock</p>
             {["Dashboard", "Daily Summary", "Meals", "Foods", "Weight", "Water"].map((item, index) => <div key={item} className={`mb-1 rounded-md px-2 py-2 text-[8px] font-semibold ${index === 0 ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}>{item}</div>)}
           </aside>
-          <div className="min-w-0 p-4 sm:p-6">
+          <div className="landing-dashboard-groups min-w-0 p-4 sm:p-6">
             <p className="text-[10px] font-semibold">Today at CalorieDock</p>
             <div className="flex flex-wrap items-end justify-between gap-2"><div><h3 className="mt-1 text-xl font-bold tracking-tight sm:text-2xl">Good morning.</h3><p className="mt-1 text-[9px] text-muted-foreground">Sunday, August 30</p></div><span className="rounded-md border px-2 py-1.5 text-[8px] font-medium">View profile</span></div>
             <p className="mt-5 text-xs font-semibold">Today’s nutrition</p>

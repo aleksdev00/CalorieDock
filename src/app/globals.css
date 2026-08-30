@@ -134,3 +134,122 @@
     @apply font-sans;
   }
 }
+
+/* Landing motion is progressive enhancement: server-rendered content stays visible,
+   while the client controller applies one-time viewport animations when available. */
+@layer components {
+  .landing-header {
+    transition: background-color var(--landing-duration-fast) var(--landing-ease-standard),
+      border-color var(--landing-duration-fast) var(--landing-ease-standard),
+      box-shadow var(--landing-duration-fast) var(--landing-ease-standard);
+  }
+
+  .landing-header[data-scrolled="true"] {
+    @apply border-border bg-background/95 shadow-sm;
+  }
+
+  .landing-nav-link,
+  .landing-button {
+    transition: color var(--landing-duration-fast) var(--landing-ease-standard),
+      background-color var(--landing-duration-fast) var(--landing-ease-standard),
+      border-color var(--landing-duration-fast) var(--landing-ease-standard),
+      transform var(--landing-duration-fast) var(--landing-ease-out);
+  }
+
+  .landing-card {
+    transition: border-color 200ms var(--landing-ease-standard),
+      box-shadow 200ms var(--landing-ease-standard),
+      transform 200ms var(--landing-ease-out);
+  }
+
+  .landing-card-icon {
+    transition: background-color 200ms var(--landing-ease-standard);
+  }
+
+  .landing-step-line {
+    transform-origin: left;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .landing-button:hover { transform: translateY(-1px); }
+    .landing-button:active { transform: translateY(0); }
+    .landing-card:hover { @apply -translate-y-0.5 border-foreground/20 shadow-md; }
+    .landing-card:hover .landing-card-icon { @apply bg-muted/70; }
+    .landing-metric { transition: background-color 200ms var(--landing-ease-standard); }
+    .landing-metric:hover { @apply bg-muted/45; }
+  }
+}
+
+:root {
+  --landing-duration-fast: 180ms;
+  --landing-duration-base: 420ms;
+  --landing-duration-slow: 650ms;
+  --landing-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --landing-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-landing-hero] {
+    animation: landing-hero-enter 500ms var(--landing-ease-out) both;
+  }
+  [data-landing-hero="2"] { animation-delay: 60ms; }
+  [data-landing-hero="3"] { animation-delay: 120ms; }
+  [data-landing-hero="4"] { animation-delay: 180ms; }
+  [data-landing-hero="5"] { animation-delay: 240ms; }
+  [data-landing-hero="6"] {
+    animation: landing-dashboard-enter 650ms var(--landing-ease-out) 250ms both;
+  }
+
+  [data-landing-hero="6"] .landing-dashboard-groups > * {
+    animation: landing-dashboard-group-enter 500ms var(--landing-ease-out) both;
+  }
+  [data-landing-hero="6"] .landing-dashboard-groups > * { animation-duration: 320ms; }
+  [data-landing-hero="6"] .landing-dashboard-groups > :nth-child(1) { animation-delay: 320ms; }
+  [data-landing-hero="6"] .landing-dashboard-groups > :nth-child(2) { animation-delay: 365ms; }
+  [data-landing-hero="6"] .landing-dashboard-groups > :nth-child(3) { animation-delay: 410ms; }
+  [data-landing-hero="6"] .landing-dashboard-groups > :nth-child(4) { animation-delay: 455ms; }
+  [data-landing-hero="6"] .landing-dashboard-groups > :nth-child(5) { animation-delay: 500ms; }
+  [data-landing-hero="6"] .landing-dashboard-groups > :nth-child(6) { animation-delay: 545ms; }
+  [data-landing-hero="6"] .landing-dashboard-groups > :nth-child(7) { animation-delay: 590ms; }
+}
+
+@keyframes landing-hero-enter {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes landing-dashboard-enter {
+  from { opacity: 0; transform: translateY(20px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes landing-dashboard-group-enter {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 767px) {
+  [data-landing-reveal] { --landing-delay: 0ms !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  .landing-header,
+  .landing-nav-link,
+  .landing-button,
+  .landing-card,
+  .landing-card-icon,
+  .landing-metric,
+  .landing-step-line,
+  [data-landing-hero],
+  [data-landing-reveal],
+  [data-landing-stagger],
+  .landing-dashboard-groups > * {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

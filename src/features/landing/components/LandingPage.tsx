@@ -5,12 +5,14 @@ import { HeroSection } from "./HeroSection"
 import { HowItWorks } from "./HowItWorks"
 import { LandingFooter } from "./LandingFooter"
 import { LandingHeader } from "./LandingHeader"
+import { LandingMotion } from "./LandingMotion"
 import { MetricsStrip } from "./MetricsStrip"
 import { ProductSpotlight } from "./ProductSpotlight"
 
 export function LandingPage() {
   return (
     <div className="min-h-screen overflow-x-clip bg-background text-foreground">
+      <LandingMotion />
       <LandingHeader />
       <main>
         <HeroSection />
