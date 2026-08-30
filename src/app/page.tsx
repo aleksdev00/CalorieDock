@@ -1,17 +1,18 @@
-import { redirect } from "next/navigation"
+import type { Metadata } from "next"
 
-import { getCurrentProfile } from "@/features/profile"
+import { LandingPage } from "@/features/landing"
 
-export default async function Home() {
-  const result = await getCurrentProfile()
+export const metadata: Metadata = {
+  title: "CalorieDock | Simple calorie and nutrition tracking",
+  description: "Track meals, calories, macros, water and weight with a clear daily nutrition dashboard.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: "CalorieDock | Nutrition tracking made clear",
+    description: "One focused place for meals, macros, hydration, weight and daily summaries.",
+    type: "website",
+  },
+}
 
-  if (!result.success) {
-    if (result.error.code === "UNAUTHENTICATED") {
-      redirect("/login")
-    }
-
-    throw new Error(result.error.message)
-  }
-
-  redirect(result.data.profile_completed ? "/dashboard" : "/onboarding")
+export default function Home() {
+  return <LandingPage />
 }

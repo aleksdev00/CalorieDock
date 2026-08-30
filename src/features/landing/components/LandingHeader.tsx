@@ -1,0 +1,23 @@
+import Link from "next/link"
+
+import { Button } from "@/components/ui/button"
+
+export function LandingHeader() {
+  const linkClass = "rounded-sm text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+  return (
+    <header className="sticky top-0 z-50 h-16 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85 md:h-[4.5rem]">
+      <div className="mx-auto flex h-full w-full max-w-7xl items-center justify-between gap-3 px-5 sm:px-6 lg:px-8">
+        <Link href="/" className="rounded-sm text-lg font-bold tracking-[-0.03em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">CalorieDock</Link>
+        <nav aria-label="Main navigation" className="hidden items-center gap-8 md:flex">
+          <Link className={linkClass} href="#features">Features</Link>
+          <Link className={linkClass} href="#how-it-works">How it works</Link>
+          <Link className={linkClass} href="#dashboard">Dashboard</Link>
+        </nav>
+        <div className="flex items-center gap-1 sm:gap-2">
+          <Button asChild variant="ghost" className="h-11 px-2.5 sm:px-3"><Link href="/login">Sign in</Link></Button>
+          <Button asChild className="h-11 px-3 sm:px-5"><Link href="/register"><span className="sm:hidden">Start</span><span className="hidden sm:inline">Start tracking</span></Link></Button>
+        </div>
+      </div>
+    </header>
+  )
+}
