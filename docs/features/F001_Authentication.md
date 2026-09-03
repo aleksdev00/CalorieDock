@@ -879,6 +879,10 @@ Authentication Provider:
 
 Supabase Authentication
 
+Supabase Auth is the authoritative authentication boundary. Its production password policy must match the application policy: a minimum of 8 characters with at least one uppercase letter, one lowercase letter, and one digit. Email confirmation is mandatory. Application validation provides early feedback but is not the security boundary.
+
+Production Auth configuration must be verified independently of the local `supabase/config.toml` before deployment. Keep production redirect allowlists narrow and limited to approved application callback URLs. Removing localhost from a hosted production redirect allowlist is optional hardening and is safe only after confirming that local development uses a separate Supabase project. SMTP credentials and other secrets must never be committed to the repository.
+
 Authentication Methods (MVP):
 
 - Email
