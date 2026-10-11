@@ -1,43 +1,18 @@
 import Link from "next/link"
-import { ArrowRight, Droplets, Plus, Scale, Search } from "lucide-react"
+import { ArrowRight, Coffee, Droplets, Plus, Scale, Search, Utensils } from "lucide-react"
 
+import { NutritionOverview } from "@/components/nutrition/NutritionOverview"
 import { Button } from "@/components/ui/button"
 import { formatWaterAmount } from "@/features/water-tracking"
 import { formatDisplayWeight } from "@/features/weight-tracking"
-import type { DashboardData } from "../types"
 import { formatNumber, formatSelectedDate, formatZonedDateTime } from "@/features/daily-summary/utils/daily-summary"
-
-const quickActions = [
-  { href: "/meals/new", label: "Add meal", icon: Plus },
-  { href: "/water/new", label: "Add water", icon: Droplets },
-  { href: "/weight/new", label: "Add weight", icon: Scale },
-  { href: "/foods", label: "Search foods", icon: Search },
-]
-
-const navigation = [
-  ["Daily Summary", "/daily-summary"],
-  ["Meals", "/meals"],
-  ["Foods", "/foods"],
-  ["Weight", "/weight"],
-  ["Water", "/water"],
-  ["Profile", "/profile"],
-] as const
+import type { DashboardData } from "../types"
 
 function greeting(timeZone: string) {
   const hour = Number(new Intl.DateTimeFormat("en", { hour: "numeric", hourCycle: "h23", timeZone }).format(new Date()))
   if (hour < 12) return "Good morning"
   if (hour < 18) return "Good afternoon"
   return "Good evening"
-}
-
-function MetricCard({ label, value, detail }: { label: string; value: string; detail: string }) {
-  return (
-    <article className="rounded-2xl border bg-card p-5 shadow-sm">
-      <p className="text-sm font-medium text-muted-foreground">{label}</p>
-      <p className="mt-2 text-3xl font-bold tracking-tight">{value}</p>
-      <p className="mt-2 text-sm text-muted-foreground">{detail}</p>
-    </article>
-  )
 }
 
 export function DashboardPage({ dashboard }: { dashboard: DashboardData }) {
@@ -47,67 +22,59 @@ export function DashboardPage({ dashboard }: { dashboard: DashboardData }) {
   const summaryHref = `/daily-summary?${new URLSearchParams({ date: dashboard.selectedDate, timeZone: dashboard.timeZone }).toString()}`
 
   return (
-    <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
-      <header className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+    <main className="mx-auto w-full max-w-6xl py-4 sm:py-6">
+      <header className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm font-semibold text-primary">Today at CalorieDock</p>
-          <h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">{greeting(dashboard.timeZone)}{name ? `, ${name}` : ""}.</h1>
-          <p className="mt-2 text-muted-foreground">{formatSelectedDate(dashboard.selectedDate)} · {dashboard.timeZone}</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">Your daily overview</p>
+          <h1 className="mt-3 text-3xl font-semibold tracking-[-0.045em] sm:text-4xl">{greeting(dashboard.timeZone)}{name ? `, ${name}` : ""}.</h1>
+          <p className="mt-2 text-sm text-muted-foreground">{formatSelectedDate(dashboard.selectedDate)} <span className="ml-1 text-xs">· {dashboard.timeZone}</span></p>
         </div>
-        <Button asChild variant="outline"><Link href="/profile">View profile</Link></Button>
+        <Button asChild size="lg" className="h-12 rounded-xl px-6"><Link href="/meals/new"><Plus aria-hidden="true" /> Add meal</Link></Button>
       </header>
 
-      <section aria-labelledby="nutrition-heading" className="mt-8">
-        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-          <div><h2 id="nutrition-heading" className="text-2xl font-semibold">Today’s nutrition</h2><p className="mt-1 text-sm text-muted-foreground">Totals from the foods recorded in today’s meals.</p></div>
-          <Button asChild variant="ghost"><Link href={summaryHref}>Open Daily Summary <ArrowRight /></Link></Button>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <MetricCard label="Calories" value={`${formatNumber(nutrition.calories)} kcal`} detail={`${dashboard.mealCount} ${dashboard.mealCount === 1 ? "meal" : "meals"} logged`} />
-          <MetricCard label="Protein" value={`${formatNumber(nutrition.protein)} g`} detail="Consumed today" />
-          <MetricCard label="Carbohydrates" value={`${formatNumber(nutrition.carbohydrates)} g`} detail="Consumed today" />
-          <MetricCard label="Fat" value={`${formatNumber(nutrition.fat)} g`} detail="Consumed today" />
-        </div>
+      <section aria-label="Today’s nutrition" className="mt-8">
+        <NutritionOverview calories={formatNumber(nutrition.calories)} protein={formatNumber(nutrition.protein)} carbohydrates={formatNumber(nutrition.carbohydrates)} fat={formatNumber(nutrition.fat)} mealCount={dashboard.mealCount} />
       </section>
 
-      <section aria-labelledby="quick-actions-heading" className="mt-8">
-        <h2 id="quick-actions-heading" className="text-xl font-semibold">Quick actions</h2>
-        <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
-          {quickActions.map(({ href, label, icon: Icon }) => <Button key={href} asChild variant="outline" className="h-auto justify-start gap-3 p-4"><Link href={href}><Icon aria-hidden="true" />{label}</Link></Button>)}
-        </div>
-      </section>
-
-      <div className="mt-8 grid gap-6 lg:grid-cols-3">
-        <section aria-labelledby="meals-heading" className="rounded-2xl border bg-card p-5 shadow-sm lg:col-span-2">
-          <div className="flex items-end justify-between gap-3"><div><h2 id="meals-heading" className="text-2xl font-semibold">Today’s meals</h2><p className="mt-1 text-sm text-muted-foreground">Chronological meal overview</p></div><Button asChild variant="ghost"><Link href="/meals">All meals</Link></Button></div>
+      <div className="mt-6 grid gap-6 lg:grid-cols-[1.6fr_1fr]">
+        <section aria-labelledby="meals-heading" className="rounded-3xl border bg-card p-5 sm:p-7">
+          <div className="flex items-center justify-between gap-3">
+            <div><h2 id="meals-heading" className="text-xl font-semibold tracking-tight">Today’s meals</h2><p className="mt-1 text-sm text-muted-foreground">A little structure for your day.</p></div>
+            <Button asChild variant="ghost" size="sm"><Link href="/meals">All meals <ArrowRight aria-hidden="true" /></Link></Button>
+          </div>
           {meals.length === 0 ? (
-            <div className="mt-5 rounded-xl border border-dashed p-8 text-center"><h3 className="font-semibold">No meals tracked today</h3><p className="mt-2 text-sm text-muted-foreground">Add your first meal to see today’s nutrition.</p><Button asChild className="mt-5"><Link href="/meals/new">Add meal</Link></Button></div>
+            <div className="mt-6 rounded-2xl border border-dashed bg-muted/30 px-5 py-10 text-center">
+              <span className="mx-auto grid size-12 place-items-center rounded-2xl bg-accent text-primary"><Utensils aria-hidden="true" /></span>
+              <h3 className="mt-4 font-semibold">Your day starts with one meal.</h3><p className="mx-auto mt-2 max-w-xs text-sm leading-6 text-muted-foreground">Add what you ate and your nutrition totals will appear here.</p>
+              <Button asChild className="mt-5"><Link href="/meals/new"><Plus aria-hidden="true" /> Add your first meal</Link></Button>
+            </div>
           ) : (
-            <div className="mt-5 divide-y">{meals.map((meal) => <Link key={meal.id} href={`/meals/${meal.id}`} className="flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0 hover:text-primary"><div><p className="font-semibold">{meal.name}</p><p className="mt-1 text-sm text-muted-foreground">{meal.meal_type} · {formatZonedDateTime(meal.consumed_at, dashboard.timeZone)}</p></div><p className="shrink-0 font-semibold">{formatNumber(meal.totals.calories)} kcal</p></Link>)}</div>
+            <ul className="mt-5 divide-y">{meals.map((meal) => (
+              <li key={meal.id}><Link href={`/meals/${meal.id}`} className="group flex items-center gap-3 rounded-lg py-5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:gap-4">
+                <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-accent text-primary">{meal.meal_type === "breakfast" ? <Coffee className="size-5" aria-hidden="true" /> : <Utensils className="size-5" aria-hidden="true" />}</span>
+                <div className="min-w-0 flex-1"><p className="break-words font-semibold group-hover:text-primary">{meal.name}</p><p className="mt-1 text-xs text-muted-foreground"><span className="capitalize">{meal.meal_type}</span> · {formatZonedDateTime(meal.consumed_at, dashboard.timeZone)}</p></div>
+                <p className="shrink-0 text-right font-semibold tabular-nums">{formatNumber(meal.totals.calories)}<span className="mt-0.5 block text-xs font-normal text-muted-foreground">kcal</span></p>
+              </Link></li>
+            ))}</ul>
           )}
+          <Button asChild variant="outline" className="mt-5 h-11 w-full rounded-xl"><Link href="/foods"><Search aria-hidden="true" /> Find a food</Link></Button>
         </section>
 
-        <div className="space-y-6">
-          <section aria-labelledby="hydration-heading" className="rounded-2xl border bg-card p-5 shadow-sm">
-            <div className="flex items-center justify-between"><h2 id="hydration-heading" className="text-xl font-semibold">Hydration</h2><Droplets className="text-primary" aria-hidden="true" /></div>
-            {dashboard.hydrationMl > 0 ? <><p className="mt-4 text-3xl font-bold">{formatWaterAmount(dashboard.hydrationMl, dashboard.waterUnit)}</p><p className="mt-2 text-sm text-muted-foreground">Recorded today</p></> : <><p className="mt-4 font-semibold">No water recorded today</p><p className="mt-2 text-sm text-muted-foreground">Add an entry to start tracking hydration.</p></>}
-            <Button asChild variant="outline" className="mt-5 w-full"><Link href="/water">View water</Link></Button>
+        <div className="space-y-4">
+          <section aria-labelledby="hydration-heading" className="rounded-3xl border bg-card p-6">
+            <div className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-xl bg-accent text-primary"><Droplets className="size-5" aria-hidden="true" /></span><h2 id="hydration-heading" className="font-semibold">Hydration</h2></div>
+            <p className="mt-5 text-3xl font-semibold tracking-tight tabular-nums">{formatWaterAmount(dashboard.hydrationMl, dashboard.waterUnit)}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{dashboard.hydrationMl > 0 ? "Water recorded today" : "No water recorded yet today"}</p>
+            <div className="mt-5 flex items-center gap-2"><Button asChild variant="outline" className="flex-1 rounded-xl"><Link href="/water/new"><Plus aria-hidden="true" /> Add water</Link></Button><Button asChild variant="ghost" size="sm"><Link href="/water">History</Link></Button></div>
           </section>
-
-          <section aria-labelledby="weight-heading" className="rounded-2xl border bg-card p-5 shadow-sm">
-            <div className="flex items-center justify-between"><h2 id="weight-heading" className="text-xl font-semibold">Latest weight</h2><Scale className="text-primary" aria-hidden="true" /></div>
-            {weight ? <><p className="mt-4 text-3xl font-bold">{formatDisplayWeight(weight.weightKg, dashboard.weightUnit)} {weightUnit}</p><p className="mt-2 text-sm text-muted-foreground">Recorded {formatZonedDateTime(weight.recordedAt, dashboard.timeZone)}</p></> : <><p className="mt-4 font-semibold">No weight data available</p><p className="mt-2 text-sm text-muted-foreground">Add your first measurement to track progress.</p></>}
-            <Button asChild variant="outline" className="mt-5 w-full"><Link href="/weight">View weight</Link></Button>
+          <section aria-labelledby="weight-heading" className="rounded-3xl border bg-card p-6">
+            <div className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-xl bg-muted text-muted-foreground"><Scale className="size-5" aria-hidden="true" /></span><h2 id="weight-heading" className="font-semibold">Latest weight</h2></div>
+            {weight ? <><p className="mt-5 text-3xl font-semibold tracking-tight tabular-nums">{formatDisplayWeight(weight.weightKg, dashboard.weightUnit)} <span className="text-sm font-normal text-muted-foreground">{weightUnit}</span></p><p className="mt-1 text-xs text-muted-foreground">Recorded {formatZonedDateTime(weight.recordedAt, dashboard.timeZone)}</p></> : <><p className="mt-5 text-lg font-semibold">Your first measurement</p><p className="mt-1 text-sm text-muted-foreground">Keep a dated record of your weight.</p></>}
+            <div className="mt-5 flex items-center gap-2"><Button asChild variant="outline" className="flex-1 rounded-xl"><Link href="/weight/new"><Plus aria-hidden="true" /> Add weight</Link></Button><Button asChild variant="ghost" size="sm"><Link href="/weight">History</Link></Button></div>
           </section>
         </div>
       </div>
-
-      <nav aria-label="Dashboard navigation" className="mt-8 rounded-2xl border bg-card p-5 shadow-sm">
-        <h2 className="text-xl font-semibold">Explore CalorieDock</h2>
-        <div className="mt-4 flex flex-wrap gap-2">{navigation.map(([label, href]) => <Button key={href} asChild variant="ghost"><Link href={label === "Daily Summary" ? summaryHref : href}>{label}</Link></Button>)}</div>
-      </nav>
-
-      <p className="mt-6 text-sm text-muted-foreground">Goals and percentages are omitted because the approved MVP data model does not store numeric nutrition, hydration, or target-weight goals.</p>
+      <Link href={summaryHref} className="mt-6 flex items-center justify-between gap-4 rounded-2xl border bg-card px-5 py-4 text-sm transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"><span><span className="font-semibold">See the whole picture.</span><span className="ml-2 text-muted-foreground">Open your daily summary.</span></span><ArrowRight className="size-4 shrink-0" aria-hidden="true" /></Link>
     </main>
   )
 }

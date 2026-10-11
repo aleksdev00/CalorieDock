@@ -29,10 +29,10 @@ export async function AuthenticatedAppLayout({
   }
 
   return (
-    <div className="min-h-screen bg-muted/30 md:grid md:grid-cols-[15rem_minmax(0,1fr)]">
+    <div className="min-h-screen bg-background md:grid md:grid-cols-[15rem_minmax(0,1fr)]">
       <ThemeSynchronizer theme={theme} />
       <AppNavigation />
-      <main className="min-w-0 p-4 sm:p-6 lg:p-8">{children}</main>
+      <div id="app-content" tabIndex={-1} className="min-w-0 px-4 pt-4 pb-[calc(6rem+env(safe-area-inset-bottom))] sm:px-6 md:pb-8 lg:px-10">{children}</div>
     </div>
   )
 }
