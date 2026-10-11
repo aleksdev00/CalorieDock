@@ -1,7 +1,18 @@
-import type { CSSProperties } from "react"
+import { BookOpenCheck, Search, Utensils } from "lucide-react"
 
-import { features } from "../data/landing-content"
+const features = [
+  { title: "Log your meal.", description: "Find a food, enter the portion and keep an accurate record of what you ate.", icon: Utensils, number: "01" },
+  { title: "Make it your own.", description: "Search foods or save your own. Edit a portion whenever you need to correct an entry.", icon: Search, number: "02" },
+  { title: "Understand your day.", description: "See calories and macros together, with water and weight close by when you need them.", icon: BookOpenCheck, number: "03" },
+]
 
 export function FeatureGrid() {
-  return <section id="features" aria-labelledby="features-heading" className="scroll-mt-20 py-20 sm:py-28"><div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8"><div data-landing-reveal className="max-w-2xl"><p className="text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">Everything essential</p><h2 id="features-heading" className="mt-4 text-3xl leading-tight font-bold tracking-[-0.04em] sm:text-5xl">The daily tools, kept together.</h2><p className="mt-5 text-base leading-7 text-muted-foreground sm:text-lg">CalorieDock turns the core parts of nutrition tracking into one consistent, private workspace.</p></div><div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">{features.map(({ title, description, icon: Icon }, index) => <article data-landing-reveal key={title} style={{ "--landing-delay": `${(index % 3) * 60}ms` } as CSSProperties} className="landing-card group rounded-2xl border bg-card p-6 shadow-sm sm:p-7"><span className="landing-card-icon grid size-11 place-items-center rounded-xl bg-muted"><Icon className="size-5" aria-hidden="true" /></span><h3 className="mt-7 text-lg font-semibold">{title}</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">{description}</p></article>)}</div></div></section>
+  return (
+    <section id="features" aria-labelledby="features-heading" className="scroll-mt-20 py-14 sm:py-20">
+      <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8">
+        <div data-landing-reveal className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><h2 id="features-heading" className="max-w-lg text-3xl font-semibold tracking-[-0.045em] sm:text-4xl">Less to figure out.<br />More of your day back.</h2><p className="max-w-sm text-sm leading-6 text-muted-foreground">The essentials of nutrition tracking, in one calm workspace.</p></div>
+        <div className="mt-8 grid gap-4 md:grid-cols-3">{features.map(({ title, description, icon: Icon, number }) => <article data-landing-reveal key={title} className="landing-card rounded-3xl border bg-card p-7"><div className="flex items-center justify-between"><span className="grid size-11 place-items-center rounded-xl bg-accent text-primary"><Icon className="size-5" aria-hidden="true" /></span><span className="text-xs text-muted-foreground">{number}</span></div><h3 className="mt-7 text-lg font-semibold">{title}</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">{description}</p></article>)}</div>
+      </div>
+    </section>
+  )
 }

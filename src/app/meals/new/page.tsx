@@ -1,10 +1,19 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { ArrowLeft, Utensils } from "lucide-react"
+
 import { Button } from "@/components/ui/button"
 import { MealForm } from "@/features/meal-tracking"
 
-export const metadata: Metadata = { title: "Create meal | CalorieDock" }
+export const metadata: Metadata = { title: "Add meal | CalorieDock" }
 
 export default function NewMealPage() {
-  return <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-10 sm:px-6"><Button asChild variant="ghost"><Link href="/meals">← Back to meals</Link></Button><section className="mt-6 rounded-2xl border bg-card p-6 shadow-sm sm:p-8"><h1 className="text-3xl font-bold tracking-tight">Create a meal</h1><p className="mb-8 mt-2 text-muted-foreground">Save the meal first, then add one or more foods.</p><MealForm /></section></main>
+  return (
+    <main className="mx-auto w-full max-w-2xl py-4 sm:py-6">
+      <Button asChild variant="ghost" className="-ml-3"><Link href="/meals"><ArrowLeft aria-hidden="true" /> Back to meals</Link></Button>
+      <header className="mt-6"><span className="grid size-12 place-items-center rounded-2xl bg-accent text-primary"><Utensils className="size-6" aria-hidden="true" /></span><h1 className="mt-5 text-3xl font-semibold tracking-[-0.045em] sm:text-4xl">What’s on your plate?</h1><p className="mt-3 text-sm leading-6 text-muted-foreground">Give your meal a name. You’ll add foods and portions next.</p></header>
+      <ol aria-label="Meal logging steps" className="mt-7 grid grid-cols-2 gap-3 text-sm"><li aria-current="step" className="flex items-center gap-2 rounded-xl bg-accent px-4 py-3 font-medium text-primary"><span className="grid size-6 place-items-center rounded-full bg-primary text-xs text-primary-foreground">1</span> Create meal</li><li className="flex items-center gap-2 rounded-xl border px-4 py-3 text-muted-foreground"><span className="grid size-6 place-items-center rounded-full border text-xs">2</span> Add foods</li></ol>
+      <section aria-label="Meal details" className="mt-5 rounded-3xl border bg-card p-5 sm:p-8"><MealForm /></section>
+    </main>
+  )
 }

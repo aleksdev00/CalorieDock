@@ -1,46 +1,35 @@
-import { Droplets, Plus, Scale, Search } from "lucide-react"
+import { CalendarDays, Coffee, Droplets, House, Leaf, Scale, Search, Utensils } from "lucide-react"
 
-const nutrition = [
-  ["Calories", "1,847 kcal", "4 meals logged"],
-  ["Protein", "142 g", "Consumed today"],
-  ["Carbohydrates", "196 g", "Consumed today"],
-  ["Fat", "61 g", "Consumed today"],
-] as const
+import { NutritionOverview } from "@/components/nutrition/NutritionOverview"
 
-const actions = [[Plus, "Add meal"], [Droplets, "Add water"], [Scale, "Add weight"], [Search, "Search foods"]] as const
+const meals = [
+  { name: "Greek yogurt & berries", type: "Breakfast", time: "08:30", calories: "420", icon: Coffee },
+  { name: "Chicken & rice bowl", type: "Lunch", time: "13:15", calories: "610", icon: Utensils },
+  { name: "Almonds & a banana", type: "Snack", time: "16:00", calories: "250", icon: Coffee },
+  { name: "Salmon & vegetables", type: "Dinner", time: "19:00", calories: "567", icon: Utensils },
+]
 
+/** Public, representative sample. Never connected to account data. */
 export function DashboardPreview({ compact = false }: { compact?: boolean }) {
   return (
-    <figure aria-label="CalorieDock dashboard product preview" className={compact ? "w-full" : "w-full lg:min-w-[640px]"}>
-      <div className="overflow-hidden rounded-2xl border bg-card shadow-[0_24px_70px_rgba(0,0,0,0.12)]">
-        <div className="flex h-9 items-center gap-1.5 border-b bg-muted/60 px-4" aria-hidden="true">
-          <span className="size-1.5 rounded-full bg-muted-foreground/30" /><span className="size-1.5 rounded-full bg-muted-foreground/30" /><span className="size-1.5 rounded-full bg-muted-foreground/30" />
-          <span className="ml-2 text-[9px] font-semibold text-muted-foreground">Product preview</span>
-        </div>
-        <div className="grid min-h-[390px] md:grid-cols-[8rem_1fr]">
-          <aside className="hidden border-r bg-muted/25 p-4 md:block" aria-label="Preview navigation">
-            <p className="mb-5 text-[10px] font-bold">CalorieDock</p>
-            {["Dashboard", "Daily Summary", "Meals", "Foods", "Weight", "Water"].map((item, index) => <div key={item} className={`mb-1 rounded-md px-2 py-2 text-[8px] font-semibold ${index === 0 ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}>{item}</div>)}
-          </aside>
-          <div className="landing-dashboard-groups min-w-0 p-4 sm:p-6">
-            <p className="text-[10px] font-semibold">Today at CalorieDock</p>
-            <div className="flex flex-wrap items-end justify-between gap-2"><div><h3 className="mt-1 text-xl font-bold tracking-tight sm:text-2xl">Good morning.</h3><p className="mt-1 text-[9px] text-muted-foreground">Sunday, August 30</p></div><span className="rounded-md border px-2 py-1.5 text-[8px] font-medium">View profile</span></div>
-            <p className="mt-5 text-xs font-semibold">Today’s nutrition</p>
-            <div className="mt-2 grid grid-cols-2 gap-2 xl:grid-cols-4">
-              {nutrition.map(([label, value, detail], index) => <div key={label} className={`${compact && index > 1 ? "hidden sm:block" : ""} rounded-xl border p-3 shadow-sm`}><p className="text-[8px] font-medium text-muted-foreground">{label}</p><p className="mt-1.5 text-sm font-bold tabular-nums">{value}</p><p className="mt-1 text-[7px] text-muted-foreground">{detail}</p></div>)}
-            </div>
-            <p className="mt-4 text-[10px] font-semibold">Quick actions</p>
-            <div className="mt-2 grid grid-cols-2 gap-2 xl:grid-cols-4">
-              {actions.map(([Icon, label], index) => <div key={label} className={`${compact && index > 1 ? "hidden sm:flex" : "flex"} min-h-9 items-center gap-2 rounded-lg border px-3 text-[8px] font-semibold`}><Icon className="size-3" aria-hidden="true" />{label}</div>)}
-            </div>
-            <div className="mt-4 grid gap-2 sm:grid-cols-[1.5fr_1fr]">
-              <div className="rounded-xl border p-3"><p className="text-xs font-semibold">Today’s meals</p><p className="mt-0.5 text-[8px] text-muted-foreground">Chronological meal overview</p>{["Breakfast", "Lunch", "Dinner", "Snack"].slice(0, compact ? 2 : 4).map((meal, index) => <div key={meal} className="mt-2 flex justify-between border-t pt-2 text-[8px] font-semibold"><span>{meal}</span><span>{[420, 610, 567, 250][index]} kcal</span></div>)}</div>
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-1"><div className="rounded-xl border p-3"><Droplets className="size-3" aria-hidden="true" /><p className="mt-2 text-base font-bold tabular-nums">2.1 L</p><p className="text-[8px] text-muted-foreground">Recorded today</p></div><div className="rounded-xl border p-3"><Scale className="size-3" aria-hidden="true" /><p className="mt-2 text-base font-bold tabular-nums">92.4 kg</p><p className="text-[8px] text-muted-foreground">Latest weight</p></div></div>
-            </div>
+    <figure className="overflow-hidden rounded-3xl border bg-card shadow-xl shadow-primary/5">
+      <div className="flex items-center gap-2 border-b px-4 py-3 sm:px-6"><span className="size-2 rounded-full bg-border" /><span className="size-2 rounded-full bg-border" /><span className="size-2 rounded-full bg-border" /><span className="ml-2 text-[10px] font-medium text-muted-foreground">CalorieDock / Today</span><span className="ml-auto rounded-full bg-accent px-2.5 py-1 text-[10px] font-semibold text-primary">Sample day</span></div>
+      <div className="grid md:grid-cols-[170px_1fr]">
+        <aside className="hidden border-r bg-card p-4 md:block" aria-label="Sample navigation">
+          <div className="flex items-center gap-2 text-sm font-semibold tracking-tight"><span className="grid size-7 place-items-center rounded-lg bg-primary text-primary-foreground"><Leaf className="size-4" aria-hidden="true" /></span>CalorieDock.</div>
+          <p className="mt-9 mb-3 text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Your workspace</p>
+          <div className="space-y-2">{[{ label: "Today", icon: House }, { label: "Meals", icon: Utensils }, { label: "Food library", icon: Search }, { label: "Daily summary", icon: CalendarDays }, { label: "Water", icon: Droplets }, { label: "Weight", icon: Scale }].map(({ label, icon: Icon }, index) => <div key={label} className={`flex items-center gap-2 rounded-xl px-3 py-3 text-xs ${index === 0 ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}><Icon className="size-3.5" aria-hidden="true" />{label}</div>)}</div>
+        </aside>
+        <div className="landing-dashboard-groups min-w-0 space-y-5 bg-background p-4 sm:p-6 lg:p-8">
+          <header><p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Your daily overview</p><h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] sm:text-3xl">Good evening, Alex.</h2><p className="mt-1 text-xs text-muted-foreground">Sunday, August 30</p></header>
+          <NutritionOverview calories="1,847" protein="142" carbohydrates="196" fat="61" mealCount={4} />
+          <div className="grid gap-4 lg:grid-cols-[1.6fr_1fr]">
+            <section className="rounded-2xl border bg-card p-4 sm:p-5" aria-label="Sample meals"><div className="flex items-center justify-between"><h3 className="font-semibold">Today’s meals</h3><span className="text-xs text-muted-foreground">4 logged</span></div><ul className="mt-2 divide-y">{meals.slice(0, compact ? 2 : 4).map(({ name, type, time, calories, icon: Icon }) => <li key={name} className="flex items-center gap-3 py-3"><span className="grid size-9 shrink-0 place-items-center rounded-xl bg-accent text-primary"><Icon className="size-4" aria-hidden="true" /></span><div className="min-w-0 flex-1"><p className="text-xs font-medium sm:text-sm">{name}</p><p className="mt-1 text-[10px] text-muted-foreground">{type} · {time}</p></div><p className="shrink-0 text-right text-sm font-semibold tabular-nums">{calories}<span className="block text-[10px] font-normal text-muted-foreground">kcal</span></p></li>)}</ul></section>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1"><section className="rounded-2xl border bg-card p-5"><h3 className="flex items-center gap-2 text-sm font-semibold"><Droplets className="size-4 text-primary" aria-hidden="true" /> Hydration</h3><p className="mt-4 text-3xl font-semibold tracking-tight">2.1 <span className="text-sm font-normal text-muted-foreground">L</span></p><p className="mt-1 text-xs text-muted-foreground">Water recorded today</p></section><section className="rounded-2xl border bg-card p-5"><h3 className="flex items-center gap-2 text-sm font-semibold"><Scale className="size-4 text-muted-foreground" aria-hidden="true" /> Latest weight</h3><p className="mt-4 text-3xl font-semibold tracking-tight">92.4 <span className="text-sm font-normal text-muted-foreground">kg</span></p><p className="mt-1 text-xs text-muted-foreground">Your latest measurement</p></section></div>
           </div>
         </div>
       </div>
-      <figcaption className="sr-only">Static representative data showing calories, macros, meals, water and weight. No user account data is used.</figcaption>
+      <figcaption className="border-t bg-card px-4 py-3 text-center text-[11px] text-muted-foreground">A representative day with sample data. Your dashboard shows your own records.</figcaption>
     </figure>
   )
 }
