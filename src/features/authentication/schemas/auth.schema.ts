@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { consentFields } from "@/features/legal-consent/client"
 
 const email = z
   .string()
@@ -21,6 +22,7 @@ export const loginSchema = z.object({
 
 export const registerSchema = z
   .object({
+    ...consentFields,
     email,
     password,
     confirmPassword: z.string().min(1, "Confirm your password."),

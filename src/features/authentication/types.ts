@@ -16,6 +16,8 @@ export interface RegisterInput {
   email: string
   password: string
   confirmPassword: string
+  legalAccepted: boolean
+  healthAccepted: boolean
 }
 
 export interface ForgotPasswordInput {
@@ -30,4 +32,3 @@ export interface ResetPasswordInput {
 export interface ResendVerificationInput {
   email: string
 }
-

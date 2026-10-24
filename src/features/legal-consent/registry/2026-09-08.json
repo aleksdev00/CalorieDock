@@ -1,0 +1,15 @@
+{
+  "effectiveDate": "2026-09-08",
+  "versions": {
+    "terms": "2026-09-08",
+    "privacy": "2026-09-08",
+    "health": "2026-09-08-v1",
+    "legalText": "2026-09-08-v1"
+  },
+  "legalText": "I agree to the Terms of Use and acknowledge the Privacy Policy.",
+  "healthText": "I explicitly consent to CalorieDock processing the nutrition, weight, hydration and related health-related information I choose to provide in order to provide the tracking features.",
+  "termsArchive": "docs/legal/2026-09-08/terms.md",
+  "privacyArchive": "docs/legal/2026-09-08/privacy.md",
+  "privacySha256": "968c1ea174a38bd52416f7ed884d12e0c7b05e0d5ef0f7b7e688c56195f27be7",
+  "termsSha256": "821f96e508de0cf5c5abcc8262d9c57e08ae0d568c9bb42f1a59ef8b0609fcdf"
+}
