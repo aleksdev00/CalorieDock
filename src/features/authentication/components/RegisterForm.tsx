@@ -6,6 +6,7 @@ import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 
 import { Button } from "@/components/ui/button"
+import { ConsentFields } from "@/features/legal-consent/client"
 
 import { registerAction } from "../actions"
 import { registerSchema } from "../schemas/auth.schema"
@@ -13,7 +14,7 @@ import type { RegisterInput } from "../types"
 import { FormField } from "./FormField"
 import { PasswordField } from "./PasswordField"
 
-export function RegisterForm() {
+export function RegisterForm({ onSwitch }: { onSwitch?: () => void }) {
   const [serverMessage, setServerMessage] = useState<string>()
   const [isPending, startTransition] = useTransition()
   const {
@@ -22,7 +23,7 @@ export function RegisterForm() {
     formState: { errors },
   } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { email: "", password: "", confirmPassword: "" },
+    defaultValues: { email: "", password: "", confirmPassword: "", legalAccepted: false, healthAccepted: false },
   })
 
   function onSubmit(values: RegisterInput) {
@@ -47,6 +48,7 @@ export function RegisterForm() {
         id="password"
         label="Password"
         autoComplete="new-password"
+        describedBy="password-instructions"
         error={errors.password?.message}
         registration={register("password")}
       />
@@ -57,19 +59,17 @@ export function RegisterForm() {
         error={errors.confirmPassword?.message}
         registration={register("confirmPassword")}
       />
-      <p className="text-xs text-muted-foreground">
+      <p id="password-instructions" className="text-xs text-muted-foreground">
         Use at least 8 characters with uppercase, lowercase, and a number.
       </p>
+      <ConsentFields
+        legalRegistration={register("legalAccepted")}
+        healthRegistration={register("healthAccepted")}
+        legalError={errors.legalAccepted?.message}
+        healthError={errors.healthAccepted?.message}
+      />
       <p className="text-xs text-muted-foreground">
-        By creating an account, you agree to the{" "}
-        <Link href="/terms" className="underline underline-offset-4">
-          Terms of Service
-        </Link>{" "}
-        and{" "}
-        <Link href="/privacy" className="underline underline-offset-4">
-          Privacy Policy
-        </Link>
-        .
+        After verifying your email and signing in, confirm these choices to save them to your account before tracking begins.
       </p>
       {serverMessage ? (
         <p className="text-sm text-destructive" role="alert">
@@ -81,14 +81,8 @@ export function RegisterForm() {
       </Button>
       <p className="text-center text-sm text-muted-foreground">
         Already have an account?{" "}
-        <Link
-          href="/login"
-          className="font-medium text-foreground underline underline-offset-4"
-        >
-          Sign in
-        </Link>
+        {onSwitch ? <button type="button" onClick={onSwitch} className="font-medium text-foreground underline underline-offset-4">Sign in</button> : <Link href="/login" className="font-medium text-foreground underline underline-offset-4">Sign in</Link>}
       </p>
     </form>
   )
 }
-

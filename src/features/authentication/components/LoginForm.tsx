@@ -16,9 +16,10 @@ import { PasswordField } from "./PasswordField"
 interface LoginFormProps {
   next?: string
   notice?: string
+  onSwitch?: () => void
 }
 
-export function LoginForm({ next, notice }: LoginFormProps) {
+export function LoginForm({ next, notice, onSwitch }: LoginFormProps) {
   const [serverMessage, setServerMessage] = useState<string>()
   const [isPending, startTransition] = useTransition()
   const {
@@ -74,15 +75,9 @@ export function LoginForm({ next, notice }: LoginFormProps) {
         </Link>
         <p className="text-muted-foreground">
           New to CalorieDock?{" "}
-          <Link
-            href="/register"
-            className="font-medium text-foreground underline underline-offset-4"
-          >
-            Create an account
-          </Link>
+          {onSwitch ? <button type="button" onClick={onSwitch} className="font-medium text-foreground underline underline-offset-4">Create one</button> : <Link href="/register" className="font-medium text-foreground underline underline-offset-4">Create an account</Link>}
         </p>
       </div>
     </form>
   )
 }
-
