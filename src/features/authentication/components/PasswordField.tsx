@@ -8,6 +8,7 @@ interface PasswordFieldProps {
   label: string
   autoComplete: string
   error?: string
+  describedBy?: string
   registration: UseFormRegisterReturn
 }
 
@@ -16,6 +17,7 @@ export function PasswordField({
   label,
   autoComplete,
   error,
+  describedBy,
   registration,
 }: PasswordFieldProps) {
   const [isVisible, setIsVisible] = useState(false)
@@ -32,7 +34,8 @@ export function PasswordField({
           type={isVisible ? "text" : "password"}
           autoComplete={autoComplete}
           aria-invalid={Boolean(error)}
-          aria-describedby={error ? errorId : undefined}
+          required
+          aria-describedby={[describedBy, error ? errorId : undefined].filter(Boolean).join(" ") || undefined}
           className="h-10 w-full rounded-lg border bg-background px-3 pr-16 text-sm outline-none transition focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive"
           {...registration}
         />
@@ -53,4 +56,3 @@ export function PasswordField({
     </div>
   )
 }
-
