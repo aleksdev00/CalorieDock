@@ -1,18 +1,41 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link"
 
 import { LoginForm } from "@/features/authentication/components/LoginForm"
 import { RegisterForm } from "@/features/authentication/components/RegisterForm"
+import { LandingMotion } from "./LandingMotion"
 
 type AccountMode = "login" | "register"
 
 export function LandingAccountOverlay() {
   const [mode, setMode] = useState<AccountMode>("register")
   const [open, setOpen] = useState(false)
+  const [closing, setClosing] = useState(false)
+  const [switching, setSwitching] = useState(false)
   const panelRef = useRef<HTMLDivElement>(null)
   const lastTriggerRef = useRef<HTMLElement | null>(null)
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const switchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const requestClose = useCallback(() => {
+    if (!open || closing) return
+    setClosing(true)
+    closeTimerRef.current = setTimeout(() => {
+      setOpen(false)
+      setClosing(false)
+    }, 230)
+  }, [closing, open])
+
+  const switchMode = useCallback((nextMode: AccountMode) => {
+    if (switching || nextMode === mode) return
+    setSwitching(true)
+    switchTimerRef.current = setTimeout(() => {
+      setMode(nextMode)
+      setSwitching(false)
+    }, 190)
+  }, [mode, switching])
 
   useEffect(() => {
     const handleTrigger = (event: MouseEvent) => {
@@ -63,7 +86,7 @@ export function LandingAccountOverlay() {
     document.body.style.overflow = "hidden"
     panelRef.current?.querySelector<HTMLElement>("input, button")?.focus()
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") { setOpen(false); return }
+      if (event.key === "Escape") { requestClose(); return }
       if (event.key !== "Tab" || !panelRef.current) return
       const focusable = Array.from(panelRef.current.querySelectorAll<HTMLElement>("a[href], button:not([disabled]), input, [tabindex='0']"))
       if (!focusable.length) return
@@ -74,18 +97,28 @@ export function LandingAccountOverlay() {
     }
     document.addEventListener("keydown", handleKeyDown)
     return () => { document.body.style.overflow = previousOverflow; document.removeEventListener("keydown", handleKeyDown) }
-  }, [open])
+  }, [closing, open, requestClose])
+
+  useEffect(() => () => {
+    if (closeTimerRef.current) clearTimeout(closeTimerRef.current)
+    if (switchTimerRef.current) clearTimeout(switchTimerRef.current)
+  }, [])
+
+  useEffect(() => {
+    if (open && !switching) panelRef.current?.querySelector<HTMLElement>("input, button")?.focus()
+  }, [open, switching, mode])
 
   return <>
+    <LandingMotion />
     <nav className="approved-mobile-menu" aria-label="Mobile navigation" hidden>
       <a href="#product">Product</a><a href="#how-it-works">How it works</a><a href="#principles">Our approach</a><a href="#account" data-account-mode="login">Sign in</a>
     </nav>
-    {open ? <div className="approved-account-overlay" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setOpen(false) }}>
-    <div ref={panelRef} className="approved-account-panel" role="dialog" aria-modal="true" aria-labelledby="account-panel-title">
-      <button className="approved-account-close" type="button" aria-label="Close account panel" onClick={() => setOpen(false)}>×</button>
+    {open ? <div className={`approved-account-overlay${closing ? " is-closing" : ""}`} role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) requestClose() }}>
+    <div ref={panelRef} className={`approved-account-panel${closing ? " is-closing" : ""}`} role="dialog" aria-modal="true" aria-labelledby="account-panel-title">
+      <button className="approved-account-close" type="button" aria-label="Close account panel" onClick={requestClose}>×</button>
       <Link className="approved-account-brand" href="/" onClick={() => setOpen(false)}><span className="approved-brand-mark">C</span>CalorieDock</Link>
-      <div className="approved-account-heading"><h2 id="account-panel-title">{mode === "register" ? "Create your account" : "Welcome back"}</h2><p>{mode === "register" ? "Start with a focused record of meals, macros, water and weight." : "Sign in to continue to your daily record."}</p></div>
-      {mode === "register" ? <RegisterForm onSwitch={() => setMode("login")} /> : <LoginForm onSwitch={() => setMode("register")} />}
+      <div className={`approved-account-content${switching ? " is-switching" : ""}`}><div className="approved-account-heading"><h2 id="account-panel-title">{mode === "register" ? "Create your account" : "Welcome back"}</h2><p>{mode === "register" ? "Start with a focused record of meals, macros, water and weight." : "Sign in to continue to your daily record."}</p></div>
+      {mode === "register" ? <RegisterForm onSwitch={() => switchMode("login")} /> : <LoginForm onSwitch={() => switchMode("register")} />}</div>
     </div>
     </div> : null}
   </>
